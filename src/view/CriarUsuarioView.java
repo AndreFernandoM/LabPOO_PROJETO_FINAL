@@ -8,6 +8,9 @@ import model.Usuario;
 import controller.UsuarioDAO;
 import javax.swing.JOptionPane;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /**
  *
  * @author Andre Fernando Machado - 837864
@@ -171,24 +174,30 @@ public class CriarUsuarioView extends javax.swing.JFrame {
         String senha2 = new String(txtSenha2.getPassword());
 
         Usuario user = new Usuario(email, senha);
+        res = new UsuarioDAO().checkEmailDuplicado(email);
 
-
-        if (senha.equals(senha2)) {
-            res = new UsuarioDAO().criarUsuario(user);
-
-            if (!res) {
-                JOptionPane.showMessageDialog(null, "USUARIO NAO CRIADO");
-            } else {
-                JOptionPane.showMessageDialog(null, "USUARIO CRIADO COM SUCESSO");
-                dispose();
-                LoginView f = new LoginView();
-                f.setVisible(true);
-
-            }
-        } else {
+        if (!senha.equals(senha2)) {
             JOptionPane.showMessageDialog(null, "Senhas Diferentes");
+            return;
         }
 
+        if (res) {
+            txtEmail.setText("");
+            txtSenha1.setText("");
+            txtSenha2.setText("");
+            JOptionPane.showMessageDialog(null, "Email já cadastrado");
+            return;
+        }
+
+        res = new UsuarioDAO().criarUsuario(user);
+        if (res) {
+            JOptionPane.showMessageDialog(null, "USUARIO CRIADO COM SUCESSO");
+            dispose();
+            LoginView f = new LoginView();
+            f.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao criar o usuário");
+        }
 
     }//GEN-LAST:event_btnSalvarActionPerformed
 
