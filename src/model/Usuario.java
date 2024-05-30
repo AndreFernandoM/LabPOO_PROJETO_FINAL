@@ -14,6 +14,12 @@ public class Usuario {
     private String email;
     private String senha;
     private boolean role = false;
+    
+        public Usuario(String email, String senha) {
+        this.email = email;
+        this.senha = senha;
+        this.role = false;
+    }
 
     public Usuario(String email, String senha,boolean role) {
         this.email = email;

@@ -21,6 +21,9 @@ public class CadastroProduto extends javax.swing.JFrame {
      */
     public CadastroProduto() {
         initComponents();
+        setResizable(false);
+        setTitle("Novos Produtos");
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -215,17 +218,15 @@ public class CadastroProduto extends javax.swing.JFrame {
     private void btnCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarActionPerformed
         String nome = txtNome.getText();
         String descricao = txtDescricao.getText();
-        boolean disponibilidade = (rdbDisponivel.isSelected())? true:false;
-        
-        
+        boolean disponibilidade = (rdbDisponivel.isSelected()) ? true : false;
+
 //        System.out.println("dipso: "+rdbDisponivel.isSelected());
 //        System.out.println("indipso: "+rdbIndisponivel.isSelected());
-
         if (nome.isEmpty() || descricao.isEmpty() || txtPreco.getText().isEmpty() || txtQuantidade.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Por favor preencher todos os campos");;
             return;
         }
-        
+
         Produto prod = new Produto(quant, disponibilidade, preco, nome, descricao);
 
         //TODO: Mandar as info para o DB

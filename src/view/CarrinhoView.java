@@ -15,6 +15,9 @@ public class CarrinhoView extends javax.swing.JFrame {
      */
     public CarrinhoView() {
         initComponents();
+        setResizable(false);
+        setTitle("Carrinho de Compras");
+        setLocationRelativeTo(null);
     }
 
     /**

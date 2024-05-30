@@ -38,7 +38,7 @@
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="162" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="btn_carrinho" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnCarrinho" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -79,7 +79,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="txt_pesquisar" min="-2" max="-2" attributes="0"/>
-                          <Component id="btn_carrinho" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnCarrinho" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -142,13 +142,16 @@
         <Property name="text" type="java.lang.String" value="Carrinho"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btn_carrinho">
+    <Component class="javax.swing.JButton" name="btnCarrinho">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/images/shopping-cart-empty-side-view.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Compras"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCarrinhoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btn_Sair">
       <Properties>

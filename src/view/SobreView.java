@@ -18,6 +18,10 @@ public class SobreView extends javax.swing.JFrame {
      */
     public SobreView() {
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setTitle("Sobre o desenvolvedor");
+
     }
 
     /**
@@ -181,22 +185,22 @@ public class SobreView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_GitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_GitActionPerformed
-            try {
-                Desktop.getDesktop().browse(new URL("https://github.com/AndreFernandoM/PROJETO_FINAL").toURI());
+        try {
+            Desktop.getDesktop().browse(new URL("https://github.com/AndreFernandoM/PROJETO_FINAL").toURI());
         } catch (Exception e) {
         }
     }//GEN-LAST:event_btn_GitActionPerformed
 
     private void btn_LinkedinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LinkedinActionPerformed
-            try {
-                Desktop.getDesktop().browse(new URL("https://www.linkedin.com/in/andre-fernando-machado/").toURI());
+        try {
+            Desktop.getDesktop().browse(new URL("https://www.linkedin.com/in/andre-fernando-machado/").toURI());
         } catch (Exception e) {
         }    }//GEN-LAST:event_btn_LinkedinActionPerformed
 
-/**
- * @param args the command line arguments
- */
-public static void main(String args[]) {
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -208,27 +212,23 @@ public static void main(String args[]) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
 
-}
+                }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SobreView.class  
+            java.util.logging.Logger.getLogger(SobreView.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(SobreView.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SobreView.class  
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(SobreView.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-} catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SobreView.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SobreView.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(SobreView.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 

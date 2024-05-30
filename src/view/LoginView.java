@@ -19,7 +19,7 @@ public class LoginView extends javax.swing.JFrame {
      */
     public LoginView() {
         initComponents();
-
+        setTitle("Login");
         setResizable(false);
         setLocationRelativeTo(null);
     }
@@ -150,40 +150,38 @@ public class LoginView extends javax.swing.JFrame {
     }//GEN-LAST:event_lblCadastreMouseClicked
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
+
         boolean res = false;
         boolean role = false;
+
         String email = txtEmail.getText();
         String senha = new String(txtSenha.getPassword());
 
         if (email.isEmpty() || senha.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Tudo Vazio");
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
             return;
-        } else {
-            Usuario user = new Usuario(email, senha, role);
-
-            role = new UsuarioDAO().getRole(user);
-            System.out.println(role);
-
-            res = new UsuarioDAO().login(user);
         }
 
+        Usuario user = new Usuario(email, senha, role);
+
+        res = new UsuarioDAO().login(user);
         if (!res) {
-            JOptionPane.showMessageDialog(null, "Usuario Inválido");
-        } else {
-            JOptionPane.showMessageDialog(null, "login realizado com sucesso");
-            if (!role) {
-                this.dispose();
-                PaginaInicialView f = new PaginaInicialView();
-                f.setVisible(true);
-
-            } else {
-                this.dispose();
-                AdmInicialView f = new AdmInicialView();
-                f.setVisible(true);
-
-            }
-
+            JOptionPane.showMessageDialog(null, "Usuário ou senha inválidos.");
+            return;
         }
+
+        role = new UsuarioDAO().getRole(user);
+
+        this.dispose();
+        if (role) {
+            AdmInicialView admView = new AdmInicialView();
+            admView.setVisible(true);
+        } else {
+            PaginaInicialView pagInicialView = new PaginaInicialView();
+            pagInicialView.setVisible(true);
+        }
+    
+
 
     }//GEN-LAST:event_btnEntrarActionPerformed
 
@@ -206,16 +204,28 @@ public class LoginView extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                }
+
+}
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginView.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(LoginView.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(LoginView.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(LoginView.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>

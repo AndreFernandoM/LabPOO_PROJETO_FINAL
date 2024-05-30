@@ -172,37 +172,47 @@ public class CriarUsuarioView extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEmailActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        boolean res = false;
-
+// Captura dos valores dos campos de texto
         String email = txtEmail.getText();
         String senha = new String(txtSenha1.getPassword());
         String senha2 = new String(txtSenha2.getPassword());
 
-        Usuario user = new Usuario(email, senha, false);
-        res = new UsuarioDAO().checkEmailDuplicado(email);
-
-        if (!senha.equals(senha2)) {
-            JOptionPane.showMessageDialog(null, "Senhas Diferentes");
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches()) {
+            txtEmail.setText("");
+            JOptionPane.showMessageDialog(null, "Email inválido. Por favor, insira um email válido.");
+            txtEmail.requestFocus();
             return;
         }
 
-        if (res) {
+        if (!senha.equals(senha2)) {
+            JOptionPane.showMessageDialog(null, "Senhas diferentes.");
+            return;
+        }
+
+        boolean emailDuplicado = new UsuarioDAO().checkEmailDuplicado(email);
+        if (emailDuplicado) {
             txtEmail.setText("");
             txtSenha1.setText("");
             txtSenha2.setText("");
-            JOptionPane.showMessageDialog(null, "Email já cadastrado");
+            JOptionPane.showMessageDialog(null, "Email já cadastrado.");
             return;
         }
 
-        res = new UsuarioDAO().criarUsuario(user);
-        if (res) {
-            JOptionPane.showMessageDialog(null, "USUARIO CRIADO COM SUCESSO");
+        Usuario user = new Usuario(email, senha, false);
+        boolean usuarioCriado = new UsuarioDAO().criarUsuario(user);
+
+        if (usuarioCriado) {
+            JOptionPane.showMessageDialog(null, "Usuário criado com sucesso.");
             dispose();
             LoginView f = new LoginView();
             f.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(null, "Erro ao criar o usuário");
+            JOptionPane.showMessageDialog(null, "Erro ao criar o usuário.");
         }
+
 
     }//GEN-LAST:event_btnSalvarActionPerformed
 
@@ -218,19 +228,6 @@ public class CriarUsuarioView extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSenha2ActionPerformed
 
     private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
-        String email = txtEmail.getText();
-
-        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        Matcher matcher = pattern.matcher(email);
-        
-        if(!matcher.matches()){
-            txtEmail.setText("");
-            JOptionPane.showMessageDialog(null, "Email inválido. Por favor, insira um email válido.");
-            txtEmail.requestFocus();
-        
-        }
-
 
 
     }//GEN-LAST:event_txtEmailFocusLost

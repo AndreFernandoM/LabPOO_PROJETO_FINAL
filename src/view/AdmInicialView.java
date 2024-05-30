@@ -16,7 +16,7 @@ public class AdmInicialView extends javax.swing.JFrame {
     public AdmInicialView() {
         initComponents();
         setResizable(false);
-        
+        setTitle("Tela de Administrador");
         setLocationRelativeTo(null);
 
     }
@@ -38,7 +38,7 @@ public class AdmInicialView extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        btn_NovoProd = new javax.swing.JButton();
+        btnNovoProd = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -76,11 +76,11 @@ public class AdmInicialView extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        btn_NovoProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/plus-sign.png"))); // NOI18N
-        btn_NovoProd.setText("Novo Produto");
-        btn_NovoProd.addActionListener(new java.awt.event.ActionListener() {
+        btnNovoProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/plus-sign.png"))); // NOI18N
+        btnNovoProd.setText("Novo Produto");
+        btnNovoProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_NovoProdActionPerformed(evt);
+                btnNovoProdActionPerformed(evt);
             }
         });
 
@@ -96,7 +96,7 @@ public class AdmInicialView extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-                        .addComponent(btn_NovoProd)
+                        .addComponent(btnNovoProd)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(btnSair, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
@@ -115,7 +115,7 @@ public class AdmInicialView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(btn_NovoProd, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnNovoProd, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(37, 37, 37))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
@@ -222,12 +222,12 @@ public class AdmInicialView extends javax.swing.JFrame {
         f.setVisible(true);
     }//GEN-LAST:event_btnSairActionPerformed
 
-    private void btn_NovoProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_NovoProdActionPerformed
+    private void btnNovoProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoProdActionPerformed
 
         dispose();
         CadastroProduto f = new CadastroProduto();
         f.setVisible(true);
-    }//GEN-LAST:event_btn_NovoProdActionPerformed
+    }//GEN-LAST:event_btnNovoProdActionPerformed
 
     private void btnSair2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSair2ActionPerformed
         // TODO add your handling code here:
@@ -269,9 +269,9 @@ public class AdmInicialView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnNovoProd;
     private javax.swing.JButton btnSair;
     private javax.swing.JButton btnSair2;
-    private javax.swing.JButton btn_NovoProd;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

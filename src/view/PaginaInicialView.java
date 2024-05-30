@@ -17,6 +17,8 @@ public class PaginaInicialView extends javax.swing.JFrame {
         initComponents();
         setResizable(false);
         setLocationRelativeTo(null);
+        setTitle("Petshop SillyPet");
+
     }
 
     /**
@@ -33,7 +35,7 @@ public class PaginaInicialView extends javax.swing.JFrame {
         txt_pesquisar = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        btn_carrinho = new javax.swing.JButton();
+        btnCarrinho = new javax.swing.JButton();
         btn_Sair = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_produtos = new javax.swing.JTable();
@@ -67,8 +69,13 @@ public class PaginaInicialView extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Carrinho");
 
-        btn_carrinho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/shopping-cart-empty-side-view.png"))); // NOI18N
-        btn_carrinho.setText("Compras");
+        btnCarrinho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/shopping-cart-empty-side-view.png"))); // NOI18N
+        btnCarrinho.setText("Compras");
+        btnCarrinho.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCarrinhoActionPerformed(evt);
+            }
+        });
 
         btn_Sair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logout.png"))); // NOI18N
         btn_Sair.setText("SAIR");
@@ -110,7 +117,7 @@ public class PaginaInicialView extends javax.swing.JFrame {
                                 .addComponent(jLabel1)
                                 .addGap(162, 162, 162)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btn_carrinho)
+                                    .addComponent(btnCarrinho)
                                     .addComponent(jLabel3)))
                             .addComponent(txt_pesquisar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -140,7 +147,7 @@ public class PaginaInicialView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txt_pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_carrinho)))
+                            .addComponent(btnCarrinho)))
                     .addComponent(jLabel2))
                 .addGap(42, 42, 42)
                 .addComponent(jLabel4)
@@ -161,6 +168,12 @@ public class PaginaInicialView extends javax.swing.JFrame {
         LoginView f = new LoginView();
         f.setVisible(true);
     }//GEN-LAST:event_btn_SairActionPerformed
+
+    private void btnCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarrinhoActionPerformed
+        dispose();
+        CarrinhoView f = new CarrinhoView();
+        f.setVisible(true);
+    }//GEN-LAST:event_btnCarrinhoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -198,8 +211,8 @@ public class PaginaInicialView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCarrinho;
     private javax.swing.JButton btn_Sair;
-    private javax.swing.JButton btn_carrinho;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
