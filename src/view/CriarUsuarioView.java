@@ -8,8 +8,6 @@ import model.Usuario;
 import controller.UsuarioDAO;
 import javax.swing.JOptionPane;
 
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  *

@@ -58,9 +58,6 @@ public class Usuario {
     public String toString() {
         return getEmail();
     }
-            
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
+
     
 }
