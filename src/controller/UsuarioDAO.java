@@ -52,6 +52,27 @@ public class UsuarioDAO {
         }
     }
 
+    public boolean getRole(Usuario u) {
+        try {
+            String SQL = "SELECT EXISTS (SELECT 1 FROM tb_usuario WHERE email=? AND role=TRUE)";
+            cmd = con.prepareStatement(SQL);
+            cmd.setString(1, u.getEmail());
+
+            ResultSet rs = cmd.executeQuery();
+
+            if (rs.next()) {
+                return rs.getBoolean(1); 
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            System.err.println("ERRO: " + e.getMessage());
+            return false;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
+
 //
     // criarUsuario: Insere um novo usuário na tabela tb_usuarios
     //
@@ -93,6 +114,8 @@ public class UsuarioDAO {
         } catch (Exception e) {
             System.err.print("erro: " + e.getMessage());
             return null;
+        } finally {
+            Conexao.desconectar(con);
         }
     }
 
@@ -111,6 +134,8 @@ public class UsuarioDAO {
         } catch (Exception e) {
             System.err.print("erro: " + e.getMessage());
             return false;
+        } finally {
+            Conexao.desconectar(con);
         }
     }
 

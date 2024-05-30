@@ -7,7 +7,9 @@ package view;
 import model.Usuario;
 import controller.UsuarioDAO;
 import javax.swing.JOptionPane;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -65,6 +67,11 @@ public class CriarUsuarioView extends javax.swing.JFrame {
         jLabel2.setText("Email");
 
         txtEmail.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        txtEmail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtEmailFocusLost(evt);
+            }
+        });
         txtEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtEmailActionPerformed(evt);
@@ -171,7 +178,7 @@ public class CriarUsuarioView extends javax.swing.JFrame {
         String senha = new String(txtSenha1.getPassword());
         String senha2 = new String(txtSenha2.getPassword());
 
-        Usuario user = new Usuario(email, senha);
+        Usuario user = new Usuario(email, senha, false);
         res = new UsuarioDAO().checkEmailDuplicado(email);
 
         if (!senha.equals(senha2)) {
@@ -209,6 +216,24 @@ public class CriarUsuarioView extends javax.swing.JFrame {
     private void txtSenha2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenha2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSenha2ActionPerformed
+
+    private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
+        String email = txtEmail.getText();
+
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        
+        if(!matcher.matches()){
+            txtEmail.setText("");
+            JOptionPane.showMessageDialog(null, "Email inválido. Por favor, insira um email válido.");
+            txtEmail.requestFocus();
+        
+        }
+
+
+
+    }//GEN-LAST:event_txtEmailFocusLost
 
     /**
      * @param args the command line arguments

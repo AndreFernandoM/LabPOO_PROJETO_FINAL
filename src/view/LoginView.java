@@ -7,6 +7,7 @@ package view;
 import controller.UsuarioDAO;
 import javax.swing.JOptionPane;
 import model.Usuario;
+
 /**
  *
  * @author Andre Fernando Machado - 837864
@@ -18,7 +19,7 @@ public class LoginView extends javax.swing.JFrame {
      */
     public LoginView() {
         initComponents();
-        
+
         setResizable(false);
         setLocationRelativeTo(null);
     }
@@ -143,7 +144,6 @@ public class LoginView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblCadastreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCadastreMouseClicked
-        // Abrir form CriarUsuario
         this.dispose();
         CriarUsuarioView f = new CriarUsuarioView();
         f.setVisible(true);
@@ -151,25 +151,40 @@ public class LoginView extends javax.swing.JFrame {
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
         boolean res = false;
+        boolean role = false;
         String email = txtEmail.getText();
         String senha = new String(txtSenha.getPassword());
-        Usuario user = new Usuario(email,senha);
-        
-        if (email.isEmpty() || senha.isEmpty()){
+
+        if (email.isEmpty() || senha.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Tudo Vazio");
             return;
-        }else{
+        } else {
+            Usuario user = new Usuario(email, senha, role);
+
+            role = new UsuarioDAO().getRole(user);
+            System.out.println(role);
+
             res = new UsuarioDAO().login(user);
         }
-        
-        if(!res){
-            JOptionPane.showMessageDialog(null,"Usuario Inválido");
-        }else{
+
+        if (!res) {
+            JOptionPane.showMessageDialog(null, "Usuario Inválido");
+        } else {
             JOptionPane.showMessageDialog(null, "login realizado com sucesso");
-            // fechar tela atual
-            // abrir proxima tela
+            if (!role) {
+                this.dispose();
+                PaginaInicialView f = new PaginaInicialView();
+                f.setVisible(true);
+
+            } else {
+                this.dispose();
+                AdmInicialView f = new AdmInicialView();
+                f.setVisible(true);
+
+            }
+
         }
-        
+
     }//GEN-LAST:event_btnEntrarActionPerformed
 
     private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed

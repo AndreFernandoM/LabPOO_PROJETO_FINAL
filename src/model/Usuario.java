@@ -13,10 +13,20 @@ public class Usuario {
     private int id;
     private String email;
     private String senha;
+    private boolean role = false;
 
-    public Usuario(String email, String senha) {
+    public Usuario(String email, String senha,boolean role) {
         this.email = email;
         this.senha = senha;
+        this.role = role;
+    }
+
+    public void setRole(boolean role) {
+        this.role = role;
+    }
+
+    public boolean isRole() {
+        return role;
     }
 
     public Usuario(int id, String email, String senha) {
