@@ -4,6 +4,7 @@
  */
 package view;
 
+import controller.ProdutoDAO;
 import javax.swing.JOptionPane;
 import model.Produto;
 
@@ -220,8 +221,6 @@ public class CadastroProduto extends javax.swing.JFrame {
         String descricao = txtDescricao.getText();
         boolean disponibilidade = (rdbDisponivel.isSelected()) ? true : false;
 
-//        System.out.println("dipso: "+rdbDisponivel.isSelected());
-//        System.out.println("indipso: "+rdbIndisponivel.isSelected());
         if (nome.isEmpty() || descricao.isEmpty() || txtPreco.getText().isEmpty() || txtQuantidade.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Por favor preencher todos os campos");;
             return;
@@ -229,7 +228,19 @@ public class CadastroProduto extends javax.swing.JFrame {
 
         Produto prod = new Produto(quant, disponibilidade, preco, nome, descricao);
 
-        //TODO: Mandar as info para o DB
+        boolean isCreated = new ProdutoDAO().criarProduto(prod);
+
+        if (!isCreated) {
+            JOptionPane.showMessageDialog(null, "ERRO ao criar novo produto");
+            return;
+        }
+        JOptionPane.showMessageDialog(null, "Produto Adicionado com SUCESSO");
+        txtDescricao.setText("");
+        txtNome.setText("");
+        txtPreco.setText("");
+        txtQuantidade.setText("");
+        rdbDisponivel.setSelected(true);
+        rdbIndisponivel.setSelected(false);
     }//GEN-LAST:event_btnCriarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -257,7 +268,8 @@ public class CadastroProduto extends javax.swing.JFrame {
     private void txtPrecoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrecoFocusLost
 
         try {
-            preco = Integer.parseInt(txtPreco.getText());
+            preco = Double.parseDouble(txtPreco.getText());
+                   
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Por favor, insira um valor numérico válido");
