@@ -61,7 +61,7 @@ public class UsuarioDAO {
             ResultSet rs = cmd.executeQuery();
 
             if (rs.next()) {
-                return rs.getBoolean(1); 
+                return rs.getBoolean(1);
             } else {
                 return false;
             }
@@ -133,6 +133,49 @@ public class UsuarioDAO {
             }
         } catch (Exception e) {
             System.err.print("erro: " + e.getMessage());
+            return false;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
+
+    public List<Usuario> getUsuarios() {
+        try {
+            String SQL = "select * from tb_usuario";
+            cmd = con.prepareStatement(SQL);
+
+            ResultSet rs = cmd.executeQuery();
+
+            List<Usuario> lista = new ArrayList<>();
+
+            while (rs.next()) {
+                lista.add(
+                        new Usuario(
+                                rs.getInt("id"),
+                                rs.getString("email"),
+                                rs.getString("senha"),
+                                rs.getBoolean("role")));
+            }
+            return lista;
+        } catch (Exception e) {
+            System.err.print("erro: " + e.getMessage());
+            return null;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
+
+    public boolean inverRole(int id) {
+        try {
+            String SQL = "UPDATE tb_usuario SET role = NOT role WHERE id = ?";
+            cmd = con.prepareStatement(SQL);
+            cmd.setInt(1, id);
+
+            int rowsAffected = cmd.executeUpdate();
+
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.err.print("Erro: " + e.getMessage());
             return false;
         } finally {
             Conexao.desconectar(con);

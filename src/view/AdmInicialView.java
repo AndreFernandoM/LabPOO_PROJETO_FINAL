@@ -4,6 +4,16 @@
  */
 package view;
 
+import components.NewTableActionCellEditor;
+import components.NewTableActionCellRender;
+import components.NewTableActionEvent;
+import model.Usuario;
+import controller.UsuarioDAO;
+import javax.swing.JOptionPane;
+
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author Andre Fernando Machado - 837864
@@ -15,10 +25,56 @@ public class AdmInicialView extends javax.swing.JFrame {
      */
     public AdmInicialView() {
         initComponents();
+
+        configColumn();
+
         setResizable(false);
         setTitle("Tela de Administrador");
         setLocationRelativeTo(null);
 
+    }
+
+    private void configColumn() {
+        NewTableActionEvent event = new NewTableActionEvent() {
+            @Override
+            public void onEdit(int row) {
+                System.out.println("clique");
+            }
+        };
+        preencherTabela();
+        tabUsuarios.getColumnModel().getColumn(3).setCellEditor(new NewTableActionCellEditor(event));
+        tabUsuarios.getColumnModel().getColumn(3).setCellRenderer(new NewTableActionCellRender());
+        tabUsuarios.getColumnModel().getColumn(0).setPreferredWidth(5);
+        tabUsuarios.getColumnModel().getColumn(1).setPreferredWidth(250);
+    }
+
+    private void configurarTabela() {
+        DefaultTableModel m = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        m.addColumn("id");
+        m.addColumn("Email");
+        m.addColumn("Role");
+        m.addColumn("Edit");
+
+        tabUsuarios.setModel(m);
+
+    }
+
+    private void preencherTabela() {
+        configurarTabela();
+        DefaultTableModel m = (DefaultTableModel) tabUsuarios.getModel();
+
+        for (Usuario t : new UsuarioDAO().getUsuarios()) {
+            m.addRow(new Object[]{
+                t.getId(), t.getEmail(), t.getRole()
+            });
+        }
+        tabUsuarios.setModel(m);
     }
 
     /**
@@ -42,9 +98,10 @@ public class AdmInicialView extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tabUsuarios = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         btnSair2 = new javax.swing.JButton();
+        btnAtualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -129,9 +186,9 @@ public class AdmInicialView extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Lista de Usuarios Cadastrados");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tabUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
+                {null, null, null, ""},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
@@ -139,8 +196,31 @@ public class AdmInicialView extends javax.swing.JFrame {
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
-        jScrollPane2.setViewportView(jTable2);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabUsuarios.setRowHeight(45);
+        tabUsuarios.getTableHeader().setReorderingAllowed(false);
+        tabUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabUsuariosMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tabUsuarios);
+        if (tabUsuarios.getColumnModel().getColumnCount() > 0) {
+            tabUsuarios.getColumnModel().getColumn(0).setResizable(false);
+            tabUsuarios.getColumnModel().getColumn(1).setResizable(false);
+            tabUsuarios.getColumnModel().getColumn(2).setResizable(false);
+            tabUsuarios.getColumnModel().getColumn(3).setResizable(false);
+            tabUsuarios.getColumnModel().getColumn(3).setCellEditor(null);
+            tabUsuarios.getColumnModel().getColumn(3).setCellRenderer(null);
+        }
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo3 (Personalizado) (2).png"))); // NOI18N
 
@@ -153,38 +233,54 @@ public class AdmInicialView extends javax.swing.JFrame {
             }
         });
 
+        btnAtualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/refresh.png"))); // NOI18N
+        btnAtualizar.setText("Atualizar");
+        btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtualizarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel4)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 339, Short.MAX_VALUE)
-                        .addComponent(btnSair2)
-                        .addContainerGap())
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 505, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnSair2))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnAtualizar))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 19, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 505, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(25, 25, 25))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(btnSair2)
                         .addGap(36, 36, 36)
-                        .addComponent(jLabel2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAtualizar)
+                        .addGap(3, 3, 3)))
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(20, Short.MAX_VALUE))
         );
@@ -230,8 +326,30 @@ public class AdmInicialView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNovoProdActionPerformed
 
     private void btnSair2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSair2ActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        LoginView f = new LoginView();
+        f.setVisible(true);
     }//GEN-LAST:event_btnSair2ActionPerformed
+
+    private void tabUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabUsuariosMouseClicked
+        int index = tabUsuarios.getSelectedRow();
+        TableModel m = tabUsuarios.getModel();
+
+        int id = Integer.parseInt(m.getValueAt(index, 0).toString());
+
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        boolean sucesso = usuarioDAO.inverRole(id);
+        if (sucesso) {
+            JOptionPane.showMessageDialog(null, "Role de usuario modificado!");
+
+        } else {
+            System.out.println("Falha ao inverter a role do usuário com ID " + id);
+        }
+    }//GEN-LAST:event_tabUsuariosMouseClicked
+
+    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
+        configColumn();
+    }//GEN-LAST:event_btnAtualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -269,6 +387,7 @@ public class AdmInicialView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnNovoProd;
     private javax.swing.JButton btnSair;
     private javax.swing.JButton btnSair2;
@@ -283,6 +402,6 @@ public class AdmInicialView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable tabUsuarios;
     // End of variables declaration//GEN-END:variables
 }

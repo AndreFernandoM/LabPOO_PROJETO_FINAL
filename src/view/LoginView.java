@@ -4,9 +4,12 @@
  */
 package view;
 
-import controller.UsuarioDAO;
-import javax.swing.JOptionPane;
 import model.Usuario;
+import controller.UsuarioDAO;
+
+import javax.swing.JOptionPane;
+import java.util.List;
+
 
 /**
  *
@@ -180,7 +183,7 @@ public class LoginView extends javax.swing.JFrame {
             PaginaInicialView pagInicialView = new PaginaInicialView();
             pagInicialView.setVisible(true);
         }
-    
+
 
 
     }//GEN-LAST:event_btnEntrarActionPerformed

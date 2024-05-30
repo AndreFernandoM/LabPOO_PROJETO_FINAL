@@ -9,19 +9,26 @@ package model;
  * @author Andre Fernando Machado - 837864
  */
 public class Usuario {
-    
+
     private int id;
     private String email;
     private String senha;
     private boolean role = false;
-    
-        public Usuario(String email, String senha) {
+
+    public Usuario(String email, String senha) {
         this.email = email;
         this.senha = senha;
         this.role = false;
     }
 
-    public Usuario(String email, String senha,boolean role) {
+    public Usuario(int id, String email, String senha, boolean role) {
+        this.id = id;
+        this.email = email;
+        this.senha = senha;
+        this.role = role;
+    }
+
+    public Usuario(String email, String senha, boolean role) {
         this.email = email;
         this.senha = senha;
         this.role = role;
@@ -31,7 +38,7 @@ public class Usuario {
         this.role = role;
     }
 
-    public boolean isRole() {
+    public boolean getRole() {
         return role;
     }
 
@@ -40,7 +47,7 @@ public class Usuario {
         this.email = email;
         this.senha = senha;
     }
-     
+
     public Usuario() {
     }
 
@@ -68,12 +75,13 @@ public class Usuario {
         return senha;
     }
 
-
-
     @Override
     public String toString() {
-        return getEmail();
+        return "Usuario{"
+                + "id=" + id
+                + ", email='" + email + '\''
+                + ", role=" + role
+                + '}';
     }
 
-    
 }
