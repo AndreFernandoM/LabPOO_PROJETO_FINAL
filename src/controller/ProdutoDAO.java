@@ -11,6 +11,9 @@ package controller;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import model.Produto;
 
 public class ProdutoDAO {
@@ -42,4 +45,36 @@ public class ProdutoDAO {
             Conexao.desconectar(con);
         }
     }
+   
+    public List<Produto> getProdutos() {
+        try {
+            String SQL = "select * from tb_produto";
+            cmd = con.prepareStatement(SQL);
+
+            ResultSet rs = cmd.executeQuery();
+
+            List<Produto> lista = new ArrayList<>();
+
+            while (rs.next()) {
+                lista.add(
+                        new Produto(
+                                rs.getInt("id"),
+                                rs.getInt("quant"),
+                                rs.getBoolean("disponivel"),
+                                rs.getDouble("preco"),
+                                rs.getString("nome"),
+                                rs.getString("descricao")));
+            }
+            return lista;
+        } catch (Exception e) {
+            System.err.print("erro: " + e.getMessage());
+            return null;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
+    
+    
+//    TODO: EDIT PRODUTO
+//          DELET PRODUTO
 }

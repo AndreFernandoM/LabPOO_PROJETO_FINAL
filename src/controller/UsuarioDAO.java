@@ -165,7 +165,7 @@ public class UsuarioDAO {
         }
     }
 
-    public boolean inverRole(int id) {
+    public boolean invertRole(int id) {
         try {
             String SQL = "UPDATE tb_usuario SET role = NOT role WHERE id = ?";
             cmd = con.prepareStatement(SQL);

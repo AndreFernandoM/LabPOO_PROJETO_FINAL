@@ -7,17 +7,23 @@ package view;
 import components.NewTableActionCellEditor;
 import components.NewTableActionCellRender;
 import components.NewTableActionEvent;
+import controller.ProdutoDAO;
 import model.Usuario;
 import controller.UsuarioDAO;
 import javax.swing.JOptionPane;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import model.Produto;
 
 /**
  *
  * @author Andre Fernando Machado - 837864
  */
+
+//TODO: apagar e editar produto;
+//      pesquisar usuario/produto por nome e checkbox de role/disponivel para JOIN 
+
 public class AdmInicialView extends javax.swing.JFrame {
 
     /**
@@ -26,7 +32,8 @@ public class AdmInicialView extends javax.swing.JFrame {
     public AdmInicialView() {
         initComponents();
 
-        configColumn();
+        configColumnUsers();
+        configColumnProds();
 
         setResizable(false);
         setTitle("Tela de Administrador");
@@ -34,21 +41,21 @@ public class AdmInicialView extends javax.swing.JFrame {
 
     }
 
-    private void configColumn() {
+    private void configColumnUsers() {
         NewTableActionEvent event = new NewTableActionEvent() {
             @Override
             public void onEdit(int row) {
                 System.out.println("clique");
             }
         };
-        preencherTabela();
+        preencherTabelaUsers();
         tabUsuarios.getColumnModel().getColumn(3).setCellEditor(new NewTableActionCellEditor(event));
         tabUsuarios.getColumnModel().getColumn(3).setCellRenderer(new NewTableActionCellRender());
         tabUsuarios.getColumnModel().getColumn(0).setPreferredWidth(5);
         tabUsuarios.getColumnModel().getColumn(1).setPreferredWidth(250);
     }
 
-    private void configurarTabela() {
+    private void configurarTabelaUsers() {
         DefaultTableModel m = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -65,8 +72,8 @@ public class AdmInicialView extends javax.swing.JFrame {
 
     }
 
-    private void preencherTabela() {
-        configurarTabela();
+    private void preencherTabelaUsers() {
+        configurarTabelaUsers();
         DefaultTableModel m = (DefaultTableModel) tabUsuarios.getModel();
 
         for (Usuario t : new UsuarioDAO().getUsuarios()) {
@@ -75,6 +82,48 @@ public class AdmInicialView extends javax.swing.JFrame {
             });
         }
         tabUsuarios.setModel(m);
+    }
+
+    private void configurarTabelaProds() {
+        DefaultTableModel g = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        g.addColumn("id");
+        g.addColumn("Nome");
+        g.addColumn("Preco");
+        g.addColumn("Quant");
+        g.addColumn("Disponivel");
+        g.addColumn("Descricao");
+
+        tabProdutos.setModel(g);
+
+    }
+
+    private void preencherTabelaProds() {
+        configurarTabelaProds();
+        DefaultTableModel g = (DefaultTableModel) tabProdutos.getModel();
+
+        for (Produto t : new ProdutoDAO().getProdutos()) {
+            g.addRow(new Object[]{
+                t.getId(), t.getNome(), t.getPreco(), t.getQuant(), t.isDisponivel(), t.getDescricao()
+            });
+        }
+        tabProdutos.setModel(g);
+    }
+
+    private void configColumnProds() {
+        preencherTabelaProds();
+
+        tabProdutos.getColumnModel().getColumn(0).setPreferredWidth(35);
+        tabProdutos.getColumnModel().getColumn(1).setPreferredWidth(125);
+        tabProdutos.getColumnModel().getColumn(2).setPreferredWidth(50);
+        tabProdutos.getColumnModel().getColumn(3).setPreferredWidth(75);
+        tabProdutos.getColumnModel().getColumn(4).setPreferredWidth(90);
+        tabProdutos.getColumnModel().getColumn(5).setPreferredWidth(255);
     }
 
     /**
@@ -93,7 +142,7 @@ public class AdmInicialView extends javax.swing.JFrame {
         btnSair = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabProdutos = new javax.swing.JTable();
         btnNovoProd = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -120,7 +169,7 @@ public class AdmInicialView extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("Lista de Produtos Cadastrados");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -130,8 +179,20 @@ public class AdmInicialView extends javax.swing.JFrame {
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabProdutos.setRowHeight(45);
+        jScrollPane1.setViewportView(tabProdutos);
+        if (tabProdutos.getColumnModel().getColumnCount() > 0) {
+            tabProdutos.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         btnNovoProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/plus-sign.png"))); // NOI18N
         btnNovoProd.setText("Novo Produto");
@@ -338,7 +399,7 @@ public class AdmInicialView extends javax.swing.JFrame {
         int id = Integer.parseInt(m.getValueAt(index, 0).toString());
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        boolean sucesso = usuarioDAO.inverRole(id);
+        boolean sucesso = usuarioDAO.invertRole(id);
         if (sucesso) {
             JOptionPane.showMessageDialog(null, "Role de usuario modificado!");
 
@@ -348,7 +409,7 @@ public class AdmInicialView extends javax.swing.JFrame {
     }//GEN-LAST:event_tabUsuariosMouseClicked
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-        configColumn();
+        configColumnUsers();
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
     /**
@@ -401,7 +462,7 @@ public class AdmInicialView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tabProdutos;
     private javax.swing.JTable tabUsuarios;
     // End of variables declaration//GEN-END:variables
 }
