@@ -7,14 +7,15 @@ package view;
 import components.NewTableActionCellEditor;
 import components.NewTableActionCellRender;
 import components.NewTableActionEvent;
-import controller.ProdutoDAO;
-import model.Usuario;
-import controller.UsuarioDAO;
-import javax.swing.JOptionPane;
 
+import controller.ProdutoDAO;
+import controller.UsuarioDAO;
+import model.Usuario;
+import model.Produto;
+
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import model.Produto;
 
 /**
  *
@@ -43,7 +44,6 @@ public class AdmInicialView extends javax.swing.JFrame {
         NewTableActionEvent event = new NewTableActionEvent() {
             @Override
             public void onEdit(int row) {
-                System.out.println("clique");
             }
         };
         preencherTabelaUsers();
@@ -189,6 +189,11 @@ public class AdmInicialView extends javax.swing.JFrame {
         });
         tabProdutos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tabProdutos.setRowHeight(45);
+        tabProdutos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabProdutosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabProdutos);
         if (tabProdutos.getColumnModel().getColumnCount() > 0) {
             tabProdutos.getColumnModel().getColumn(0).setResizable(false);
@@ -327,10 +332,9 @@ public class AdmInicialView extends javax.swing.JFrame {
                                 .addGap(0, 139, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnAtualizar))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnSair2)))))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnAtualizar, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnSair2, javax.swing.GroupLayout.Alignment.TRAILING))))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -408,9 +412,8 @@ public class AdmInicialView extends javax.swing.JFrame {
         boolean sucesso = usuarioDAO.invertRole(id);
         if (sucesso) {
             JOptionPane.showMessageDialog(null, "Role de usuario modificado!");
+            return;
 
-        } else {
-            System.out.println("Falha ao inverter a role do usuário com ID " + id);
         }
     }//GEN-LAST:event_tabUsuariosMouseClicked
 
@@ -421,6 +424,22 @@ public class AdmInicialView extends javax.swing.JFrame {
     private void btnAtualizar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizar2ActionPerformed
         configColumnProds();
     }//GEN-LAST:event_btnAtualizar2ActionPerformed
+
+    private void tabProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabProdutosMouseClicked
+        int index = tabProdutos.getSelectedRow();
+        TableModel p = tabProdutos.getModel();
+
+
+        int id = Integer.parseInt(p.getValueAt(index, 0).toString());
+        int quantidade = Integer.parseInt(p.getValueAt(index, 3).toString());
+        double preco = Double.parseDouble(p.getValueAt(index, 2).toString());
+        String nome = p.getValueAt(index, 1).toString();
+        String descricao = p.getValueAt(index, 5).toString();
+        boolean disponibilidade = p.getValueAt(index, 4).toString().equals("Disponível");
+
+        EditarProdutoView ep = new EditarProdutoView(id, quantidade, preco, nome, descricao, disponibilidade);
+        ep.setVisible(true);
+    }//GEN-LAST:event_tabProdutosMouseClicked
 
     /**
      * @param args the command line arguments

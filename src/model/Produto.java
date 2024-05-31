@@ -37,6 +37,30 @@ public class Produto {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public void setDisponivel(boolean disponivel) {
+        this.disponivel = disponivel;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
     public int getQuantidade() {
         return quantidade;
     }
@@ -55,6 +79,11 @@ public class Produto {
 
     public String getDescricao() {
         return descricao;
+    }
+
+    @Override
+    public String toString() {
+        return "Produto: " +getNome()+ "\nPreço: "+getPreco();
     }
 }
 

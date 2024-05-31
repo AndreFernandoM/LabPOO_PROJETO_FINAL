@@ -1,29 +1,61 @@
+package view;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package view;
-
 import controller.ProdutoDAO;
 import javax.swing.JOptionPane;
 import model.Produto;
+import view.AdmInicialView;
 
 /**
  *
  * @author Andre Fernando Machado - 837864
  */
-public class CadastroProduto extends javax.swing.JFrame {
+public class EditarProdutoView extends javax.swing.JFrame {
 
-    private int quant;
-    private double preco;
+    private int id;
+    String nome;
+    String descricao;
+    boolean disponibilidade;
+    double preco;
+    int quantidade;
 
     /**
-     * Creates new form CadastroProduto
+     * Creates new form EditarProdutoView
      */
-    public CadastroProduto() {
+    public EditarProdutoView(int id, int quantidade, double preco, String nome, String descricao, boolean disponibilidade) {
+        setUndecorated(true);
+
         initComponents();
         setResizable(false);
-        setTitle("Novos Produtos");
+        setTitle("Edição de Produto");
+        setLocationRelativeTo(null);
+
+        txtNome.setText(nome);
+        txtDescricao.setText(descricao);
+        txtQuantidade.setText(String.valueOf(quantidade));
+        txtPreco.setText(String.valueOf(preco));
+        this.id = id;
+
+        this.nome = txtNome.getText();
+        this.descricao = txtDescricao.getText();
+        this.disponibilidade = (rdbDisponivel.isSelected())?true:false;
+        this.preco = Double.parseDouble(txtPreco.getText());
+        this.quantidade = Integer.parseInt(txtQuantidade.getText());
+
+        if (disponibilidade) {
+            rdbDisponivel.setSelected(true);
+        } else {
+            rdbIndisponivel.setSelected(false);
+        }
+    }
+
+    public EditarProdutoView() {
+        initComponents();
+        setResizable(false);
+        setTitle("Edição dee Produto");
         setLocationRelativeTo(null);
     }
 
@@ -48,15 +80,15 @@ public class CadastroProduto extends javax.swing.JFrame {
         txtDescricao = new javax.swing.JTextArea();
         rdbIndisponivel = new javax.swing.JRadioButton();
         rdbDisponivel = new javax.swing.JRadioButton();
-        btnCriar = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        txtPreco = new javax.swing.JTextField();
         txtQuantidade = new javax.swing.JTextField();
+        txtPreco = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Novo Produto");
+        jLabel1.setText("Editar Produto");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Nome do Produto");
@@ -96,11 +128,11 @@ public class CadastroProduto extends javax.swing.JFrame {
             }
         });
 
-        btnCriar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/plus-sign.png"))); // NOI18N
-        btnCriar.setText("Criar Produto");
-        btnCriar.addActionListener(new java.awt.event.ActionListener() {
+        btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png"))); // NOI18N
+        btnSalvar.setText("Salvar Edição");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCriarActionPerformed(evt);
+                btnSalvarActionPerformed(evt);
             }
         });
 
@@ -108,6 +140,12 @@ public class CadastroProduto extends javax.swing.JFrame {
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
+            }
+        });
+
+        txtQuantidade.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtQuantidadeFocusLost(evt);
             }
         });
 
@@ -119,12 +157,6 @@ public class CadastroProduto extends javax.swing.JFrame {
         txtPreco.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPrecoActionPerformed(evt);
-            }
-        });
-
-        txtQuantidade.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtQuantidadeFocusLost(evt);
             }
         });
 
@@ -145,7 +177,7 @@ public class CadastroProduto extends javax.swing.JFrame {
                             .addContainerGap()
                             .addComponent(btnCancelar)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnCriar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                             .addGap(35, 35, 35)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -165,7 +197,7 @@ public class CadastroProduto extends javax.swing.JFrame {
                                             .addComponent(txtQuantidade, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(rdbDisponivel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                                 .addComponent(jScrollPane1)))))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,20 +219,19 @@ public class CadastroProduto extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(rdbDisponivel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rdbIndisponivel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(rdbIndisponivel)
+                            .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel3))
+                .addGap(13, 13, 13)
                 .addComponent(jLabel5)
                 .addGap(12, 12, 12)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCriar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(41, Short.MAX_VALUE))
+                    .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -208,113 +239,114 @@ public class CadastroProduto extends javax.swing.JFrame {
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         dispose();
-        AdmInicialView f = new AdmInicialView();
-        f.setVisible(true);
+
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void rdbDisponivelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbDisponivelActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_rdbDisponivelActionPerformed
 
-    private void btnCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarActionPerformed
-        String nome = txtNome.getText();
-        String descricao = txtDescricao.getText();
-        boolean disponibilidade = (rdbDisponivel.isSelected()) ? true : false;
-
-        if (nome.isEmpty() || descricao.isEmpty() || txtPreco.getText().isEmpty() || txtQuantidade.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Por favor preencher todos os campos");;
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        try {
+            preco = Double.parseDouble(txtPreco.getText());
+            quantidade = Integer.parseInt(txtQuantidade.getText());
+            nome = txtNome.getText();
+            descricao = txtDescricao.getText();
+            disponibilidade = (rdbDisponivel.isSelected())?true:false;
+            
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Por favor, insira um valor numérico válido para preço e quantidade");
             return;
         }
-        Produto prod = new Produto(quant, disponibilidade, preco, nome, descricao);
 
-        boolean isCreated = new ProdutoDAO().criarProduto(prod);
-
-        if (!isCreated) {
-            JOptionPane.showMessageDialog(null, "ERRO ao criar novo produto");
+        if (nome.isEmpty() || descricao.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos");
             return;
         }
-        JOptionPane.showMessageDialog(null, "Produto Adicionado com SUCESSO");
-        txtDescricao.setText("");
-        txtNome.setText("");
-        txtPreco.setText("");
-        txtQuantidade.setText("");
-        rdbDisponivel.setSelected(true);
-        rdbIndisponivel.setSelected(false);
-    }//GEN-LAST:event_btnCriarActionPerformed
+
+        Produto produto = new Produto(quantidade, disponibilidade, preco, nome, descricao);
+
+        if (new ProdutoDAO().editarProduto(id, produto)) {
+            JOptionPane.showMessageDialog(null, "Produto editado com sucesso");
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao editar o produto");
+        }
+
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
-        AdmInicialView f = new AdmInicialView();
-        f.setVisible(true);
-    }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void txtPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPrecoActionPerformed
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtQuantidadeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtQuantidadeFocusLost
 
         try {
-            quant = Integer.parseInt(txtQuantidade.getText());
+            quantidade = Integer.parseInt(txtQuantidade.getText());
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Por favor, insira um valor numérico válido");
             txtQuantidade.setText("");
             return;
         }
+
     }//GEN-LAST:event_txtQuantidadeFocusLost
 
-    private void txtPrecoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrecoFocusLost
+    private void txtPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecoActionPerformed
 
+    private void txtPrecoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrecoFocusLost
         try {
             preco = Double.parseDouble(txtPreco.getText());
+            return;
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Por favor, insira um valor numérico válido");
             txtPreco.setText("");
             return;
 
-
         }    }//GEN-LAST:event_txtPrecoFocusLost
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CadastroProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CadastroProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CadastroProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CadastroProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CadastroProduto().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(EditarProdutoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(EditarProdutoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(EditarProdutoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(EditarProdutoView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new EditarProdutoView().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnCriar;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnVoltar;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;

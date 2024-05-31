@@ -8,7 +8,6 @@ package controller;
  *
  * @author Andre Fernando Machado - 837864
  */
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +16,7 @@ import java.util.List;
 import model.Produto;
 
 public class ProdutoDAO {
-    
+
     private Connection con;
     private PreparedStatement cmd;
 
@@ -25,7 +24,7 @@ public class ProdutoDAO {
         this.con = Conexao.conectar();
     }
 
-   public boolean criarProduto(Produto produto) {
+    public boolean criarProduto(Produto produto) {
         try {
             String SQL = "INSERT INTO tb_produto (quant, disponivel, preco, nome, descricao) VALUES (?, ?, ?, ?, ?)";
             cmd = con.prepareStatement(SQL);
@@ -45,7 +44,7 @@ public class ProdutoDAO {
             Conexao.desconectar(con);
         }
     }
-   
+
     public List<Produto> getProdutos() {
         try {
             String SQL = "select * from tb_produto";
@@ -73,8 +72,29 @@ public class ProdutoDAO {
             Conexao.desconectar(con);
         }
     }
-    
-    
-//    TODO: EDIT PRODUTO
+
+    public boolean editarProduto(int id, Produto produto) {
+        try {
+            String SQL = "UPDATE tb_produto SET quant=?, disponivel=?, preco=?, nome=?, descricao=? WHERE id=?";
+            cmd = con.prepareStatement(SQL);
+            cmd.setInt(1, produto.getQuantidade());
+            cmd.setBoolean(2, produto.isDisponivel());
+            cmd.setDouble(3, produto.getPreco());
+            cmd.setString(4, produto.getNome());
+            cmd.setString(5, produto.getDescricao());
+            cmd.setInt(6, id);
+
+            int rowsAffected = cmd.executeUpdate();
+
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.err.println("Erro ao editar produto: " + e.getMessage());
+            return false;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
+
+//    
 //          DELET PRODUTO
 }
