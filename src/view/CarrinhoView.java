@@ -4,6 +4,13 @@
  */
 package view;
 
+import controller.CarrinhoDAO;
+import model.Produto;
+
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Andre Fernando Machado - 837864
@@ -13,11 +20,63 @@ public class CarrinhoView extends javax.swing.JFrame {
     /**
      * Creates new form CarrinhoView
      */
+    double carrinhTotal = 0.00;
+
     public CarrinhoView() {
         initComponents();
+        configColumn();
         setResizable(false);
         setTitle("Carrinho de Compras");
         setLocationRelativeTo(null);
+    }
+
+    private void configColumn() {
+        preencherTabela();
+        tabCarrinho.getColumnModel().getColumn(0).setPreferredWidth(25);
+        tabCarrinho.getColumnModel().getColumn(1).setPreferredWidth(100);
+
+    }
+
+    private void configurarTabela() {
+        DefaultTableModel m = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        m.addColumn("ID");
+        m.addColumn("Nome");
+        m.addColumn("Qntd");
+        m.addColumn("Preço");
+//        m.addColumn("Total");
+
+        tabCarrinho.setModel(m);
+    }
+
+    private void preencherTabela() {
+        configurarTabela();
+        DefaultTableModel m = (DefaultTableModel) tabCarrinho.getModel();
+
+        CarrinhoDAO carrinhoDAO = new CarrinhoDAO();
+        List<Produto> produtosCarrinho = carrinhoDAO.getCarrinhoPorUsuario();
+
+        double carrinhoTotal = 0.0; 
+
+        for (Produto p : produtosCarrinho) {
+            double totalProduto = p.getQuantidade() * p.getPreco();
+            carrinhoTotal += totalProduto;
+            m.addRow(new Object[]{
+                p.getId(),
+                p.getNome(),
+                p.getQuantidade(),
+                p.getPreco()
+            });
+        }
+        
+        txtCarrinhoTotal.setText(String.valueOf(carrinhoTotal));
+
+        tabCarrinho.setModel(m);
     }
 
     /**
@@ -33,7 +92,11 @@ public class CarrinhoView extends javax.swing.JFrame {
         btn_Sair = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabCarrinho = new javax.swing.JTable();
+        txtCarrinhoTotal = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        btnFinalizarCompra = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -51,18 +114,44 @@ public class CarrinhoView extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/shopping-cart-empty-side-view.png"))); // NOI18N
         jLabel1.setText("Carrinho");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabCarrinho.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabCarrinho.setRowHeight(30);
+        jScrollPane1.setViewportView(tabCarrinho);
+        if (tabCarrinho.getColumnModel().getColumnCount() > 0) {
+            tabCarrinho.getColumnModel().getColumn(0).setResizable(false);
+            tabCarrinho.getColumnModel().getColumn(1).setResizable(false);
+            tabCarrinho.getColumnModel().getColumn(2).setResizable(false);
+            tabCarrinho.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        txtCarrinhoTotal.setText("0.00");
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setText("TOTAL:");
+
+        jLabel3.setText("R$");
+
+        btnFinalizarCompra.setText("Finalizar Compra");
+        btnFinalizarCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinalizarCompraActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -70,20 +159,33 @@ public class CarrinhoView extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_Sair)
-                        .addContainerGap())
+                        .addComponent(jLabel2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btn_Sair)
+                                .addContainerGap())
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(64, 64, 64)
+                                .addComponent(jLabel1)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(53, 53, 53)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3)
+                                .addGap(3, 3, 3)
+                                .addComponent(txtCarrinhoTotal))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(53, 53, 53))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(59, 59, 59)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 63, Short.MAX_VALUE))
+                .addGap(179, 179, 179)
+                .addComponent(btnFinalizarCompra)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,9 +197,16 @@ public class CarrinhoView extends javax.swing.JFrame {
                         .addGap(30, 30, 30)
                         .addComponent(jLabel1))
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCarrinhoTotal)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnFinalizarCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -108,6 +217,11 @@ public class CarrinhoView extends javax.swing.JFrame {
         PaginaInicialView f = new PaginaInicialView();
         f.setVisible(true);
     }//GEN-LAST:event_btn_SairActionPerformed
+
+    private void btnFinalizarCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarCompraActionPerformed
+        PagamentoView p = new PagamentoView();
+        p.setVisible(true);
+    }//GEN-LAST:event_btnFinalizarCompraActionPerformed
 
     /**
      * @param args the command line arguments
@@ -145,10 +259,14 @@ public class CarrinhoView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFinalizarCompra;
     private javax.swing.JButton btn_Sair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tabCarrinho;
+    private javax.swing.JLabel txtCarrinhoTotal;
     // End of variables declaration//GEN-END:variables
 }

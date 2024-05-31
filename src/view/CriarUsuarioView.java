@@ -6,7 +6,6 @@ package view;
 
 import model.Usuario;
 import controller.UsuarioDAO;
-import javax.swing.JOptionPane;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;

@@ -9,37 +9,36 @@ package model;
  * @author Andre Fernando Machado - 837864
  */
 public class Produto {
-
     private int id;
-    private int quant;
+    private int quantidade;
     private boolean disponivel;
     private double preco;
     private String nome;
     private String descricao;
 
-    public Produto(int id, int quant, boolean disponivel, double preco, String nome, String descricao) {
+    public Produto(int quantidade, boolean disponivel, double preco, String nome, String descricao) {
+        this.quantidade = quantidade;
+        this.disponivel = disponivel;
+        this.preco = preco;
+        this.nome = nome;
+        this.descricao = descricao;
+    }
+    public Produto(int id, int quantidade, boolean disponivel, double preco, String nome, String descricao) {
         this.id = id;
-        this.quant = quant;
-        this.disponivel = disponivel;
-        this.preco = preco;
-        this.nome = nome;
-        this.descricao = descricao;
-    }
-    public Produto(int quant, boolean disponivel, double preco, String nome, String descricao) {
-
-        this.quant = quant;
+        this.quantidade = quantidade;
         this.disponivel = disponivel;
         this.preco = preco;
         this.nome = nome;
         this.descricao = descricao;
     }
 
+    // Getters e Setters
     public int getId() {
         return id;
     }
 
-    public int getQuant() {
-        return quant;
+    public int getQuantidade() {
+        return quantidade;
     }
 
     public boolean isDisponivel() {
@@ -57,34 +56,6 @@ public class Produto {
     public String getDescricao() {
         return descricao;
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setQuant(int quant) {
-        this.quant = quant;
-    }
-
-    public void setDisponivel(boolean disponivel) {
-        this.disponivel = disponivel;
-    }
-
-    public void setPreco(double preco) {
-        this.preco = preco;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    @Override
-    public String toString() {
-        return getNome();
-    }
-
 }
+
+

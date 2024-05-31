@@ -225,7 +225,6 @@ public class CadastroProduto extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Por favor preencher todos os campos");;
             return;
         }
-
         Produto prod = new Produto(quant, disponibilidade, preco, nome, descricao);
 
         boolean isCreated = new ProdutoDAO().criarProduto(prod);

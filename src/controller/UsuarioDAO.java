@@ -6,13 +6,11 @@ package controller;
 
 import model.Usuario;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.DriverManager;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -27,36 +25,39 @@ public class UsuarioDAO {
         this.con = Conexao.conectar();
     }
 
-    //    
-    //    Login: user auth 
-    //    botao entrar
-    public boolean login(Usuario u) {
+    public Usuario login(String email, String senha) {
         try {
             String SQL = "select * from tb_usuario where email=? and senha=MD5(?)";
             cmd = con.prepareStatement(SQL);
-            cmd.setString(1, u.getEmail());
-            cmd.setString(2, u.getSenha());
+            cmd.setString(1, email);
+            cmd.setString(2, senha);
 
             ResultSet rs = cmd.executeQuery();
 
             if (rs.next()) {
-                return true;
+                return new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getBoolean("role")
+                );
             } else {
-                return false;
+                return null;
             }
         } catch (Exception e) {
+            System.out.println("AQUI");
             System.err.println("ERRO: " + e.getMessage());
-            return false;
+            return null;
         } finally {
             Conexao.desconectar(con);
         }
     }
 
-    public boolean getRole(Usuario u) {
+    public boolean getRole(String email) {
         try {
             String SQL = "SELECT EXISTS (SELECT 1 FROM tb_usuario WHERE email=? AND role=TRUE)";
             cmd = con.prepareStatement(SQL);
-            cmd.setString(1, u.getEmail());
+            cmd.setString(1, email);
 
             ResultSet rs = cmd.executeQuery();
 
@@ -68,14 +69,9 @@ public class UsuarioDAO {
         } catch (Exception e) {
             System.err.println("ERRO: " + e.getMessage());
             return false;
-        } finally {
-            Conexao.desconectar(con);
         }
     }
 
-//
-    // criarUsuario: Insere um novo usuário na tabela tb_usuarios
-    //
     public boolean criarUsuario(Usuario u) {
         try {
             String SQL = "insert into tb_usuario(email,senha) values (?, MD5(?));";
@@ -83,7 +79,7 @@ public class UsuarioDAO {
             cmd.setString(1, u.getEmail());
             cmd.setString(2, u.getSenha());
 
-            return cmd.executeUpdate() > 0 ? true : false;
+            return cmd.executeUpdate() > 0;
 
         } catch (Exception e) {
             System.err.println("ERRO: " + e.getMessage());
@@ -101,7 +97,7 @@ public class UsuarioDAO {
 
             ResultSet rs = cmd.executeQuery();
 
-            List<Usuario> lista = new ArrayList();
+            List<Usuario> lista = new ArrayList<>();
 
             while (rs.next()) {
                 lista.add(
@@ -126,11 +122,7 @@ public class UsuarioDAO {
             cmd.setString(1, email);
 
             ResultSet rs = cmd.executeQuery();
-            if (rs.next()) {
-                return true;
-            } else {
-                return false;
-            }
+            return rs.next();
         } catch (Exception e) {
             System.err.print("erro: " + e.getMessage());
             return false;
@@ -181,5 +173,4 @@ public class UsuarioDAO {
             Conexao.desconectar(con);
         }
     }
-
 }

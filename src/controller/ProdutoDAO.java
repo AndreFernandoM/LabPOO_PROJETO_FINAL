@@ -29,7 +29,7 @@ public class ProdutoDAO {
         try {
             String SQL = "INSERT INTO tb_produto (quant, disponivel, preco, nome, descricao) VALUES (?, ?, ?, ?, ?)";
             cmd = con.prepareStatement(SQL);
-            cmd.setInt(1, produto.getQuant());
+            cmd.setInt(1, produto.getQuantidade());
             cmd.setBoolean(2, produto.isDisponivel());
             cmd.setDouble(3, produto.getPreco());
             cmd.setString(4, produto.getNome());
