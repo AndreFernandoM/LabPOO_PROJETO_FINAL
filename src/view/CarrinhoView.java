@@ -10,6 +10,7 @@ import model.Produto;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -61,7 +62,7 @@ public class CarrinhoView extends javax.swing.JFrame {
         CarrinhoDAO carrinhoDAO = new CarrinhoDAO();
         List<Produto> produtosCarrinho = carrinhoDAO.getCarrinhoPorUsuario();
 
-        double carrinhoTotal = 0.0; 
+        double carrinhoTotal = 0.0;
 
         for (Produto p : produtosCarrinho) {
             double totalProduto = p.getQuantidade() * p.getPreco();
@@ -73,8 +74,8 @@ public class CarrinhoView extends javax.swing.JFrame {
                 p.getPreco()
             });
         }
-        
-        txtCarrinhoTotal.setText(String.valueOf(carrinhoTotal));
+
+        txtCarrinhoTotal.setText(String.valueOf(String.format("%.2f", carrinhoTotal)));
 
         tabCarrinho.setModel(m);
     }
@@ -131,6 +132,11 @@ public class CarrinhoView extends javax.swing.JFrame {
             }
         });
         tabCarrinho.setRowHeight(30);
+        tabCarrinho.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabCarrinhoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabCarrinho);
         if (tabCarrinho.getColumnModel().getColumnCount() > 0) {
             tabCarrinho.getColumnModel().getColumn(0).setResizable(false);
@@ -206,7 +212,7 @@ public class CarrinhoView extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnFinalizarCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -222,6 +228,34 @@ public class CarrinhoView extends javax.swing.JFrame {
         PagamentoView p = new PagamentoView();
         p.setVisible(true);
     }//GEN-LAST:event_btnFinalizarCompraActionPerformed
+
+    private void tabCarrinhoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabCarrinhoMouseClicked
+        int index = tabCarrinho.getSelectedRow();
+        TableModel p = tabCarrinho.getModel();
+
+        int id = Integer.parseInt(p.getValueAt(index, 0).toString());
+        int qnt = Integer.parseInt(p.getValueAt(index, 2).toString());
+
+        if (qnt < 2) {
+            if (new CarrinhoDAO().deletarProdutoCarrinho(id)) {;
+                configColumn();
+                JOptionPane.showMessageDialog(null, "apagado");
+            };
+        } else {
+            Object[] options = {"Excluir do Carrinho", "Remover Apenas 1 unidade"};
+            int op = JOptionPane.showOptionDialog(null, "Deseja Apagar o produto ou Remover 1 unidade?", "Edição do Carrinho", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            if (String.valueOf(op).equals("1")) {
+                if (new CarrinhoDAO().diminuirProdutoCarrinho(id)) {
+                    configColumn();
+                    return;
+                };
+            }
+            new CarrinhoDAO().deletarProdutoCarrinho(id);
+            System.out.println("Apagado");
+        }
+        configColumn();
+
+    }//GEN-LAST:event_tabCarrinhoMouseClicked
 
     /**
      * @param args the command line arguments
