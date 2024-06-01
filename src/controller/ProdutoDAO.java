@@ -90,11 +90,74 @@ public class ProdutoDAO {
         } catch (Exception e) {
             System.err.println("Erro ao editar produto: " + e.getMessage());
             return false;
-        } finally {
-            Conexao.desconectar(con);
         }
     }
+    
+    public boolean deletProduto(int id) {
+    try {
+        // Verificar se há registros associados na tabela tb_carrinho
+        String checkSQL = "SELECT COUNT(*) FROM tb_carrinho WHERE id_produto = ?";
+        cmd = con.prepareStatement(checkSQL);
+        cmd.setInt(1, id);
+        ResultSet rs = cmd.executeQuery();
+        rs.next();
+        int count = rs.getInt(1);
 
-//    
-//          DELET PRODUTO
+        if (count > 0) {
+            // Se houver registros associados, exclua todas as linhas na tb_carrinho relacionadas ao produto
+            String deleteCarrinhoSQL = "DELETE FROM tb_carrinho WHERE id_produto=?";
+            PreparedStatement cmd2 = con.prepareStatement(deleteCarrinhoSQL);
+            cmd2.setInt(1, id);
+            cmd2.executeUpdate();
+            cmd2.close();
+        }
+
+        // Em seguida, exclua o produto da tabela tb_produto
+        String deleteProdutoSQL = "DELETE FROM tb_produto WHERE id=?";
+        PreparedStatement cmd3 = con.prepareStatement(deleteProdutoSQL);
+        cmd3.setInt(1, id);
+        int rowsAffected = cmd3.executeUpdate();
+        cmd3.close();
+
+        return rowsAffected > 0;
+    } catch (Exception e) {
+        System.err.println("Erro ao deletar produto: " + e.getMessage());
+        return false;
+    } finally {
+        Conexao.desconectar(con);
+    }
+}
+
+
+//    public boolean deletProduto(int id) {
+//        try {
+//
+//            String SQL = "SELECT COUNT(*) FROM tb_carrinho WHERE id_produto = ?";
+//            cmd = con.prepareStatement(SQL);
+//            cmd.setInt(1, id);
+//            ResultSet rs = cmd.executeQuery();
+//            rs.next();
+//            int count = rs.getInt(1);
+//
+//            if (count > 0) {
+//                String SQL2 = "DELETE FROM tb_carrinho WHERE id_produto=?";
+//                PreparedStatement cmd2 = con.prepareStatement(SQL2);
+//                cmd2.setInt(1, id);
+//                cmd2.executeUpdate();
+//
+//            }
+//            String SQL3 = "DELETE FROM tb_produto WHERE id=?";
+//            PreparedStatement cmd3 = con.prepareStatement(SQL3);
+//            cmd3.setInt(1, id);
+//            int rowsAffected = cmd.executeUpdate();
+//
+//            return rowsAffected > 0;
+//        } catch (Exception e) {
+//            System.err.println("Erro ao deletar produto: " + e.getMessage());
+//            return false;
+//        } finally {
+//
+//        }
+//    }
+
 }

@@ -14,7 +14,7 @@ import view.AdmInicialView;
  * @author Andre Fernando Machado - 837864
  */
 public class EditarProdutoView extends javax.swing.JFrame {
-
+    
     private int id;
     String nome;
     String descricao;
@@ -27,31 +27,31 @@ public class EditarProdutoView extends javax.swing.JFrame {
      */
     public EditarProdutoView(int id, int quantidade, double preco, String nome, String descricao, boolean disponibilidade) {
         setUndecorated(true);
-
+        
         initComponents();
         setResizable(false);
         setTitle("Edição de Produto");
         setLocationRelativeTo(null);
-
+        
         txtNome.setText(nome);
         txtDescricao.setText(descricao);
         txtQuantidade.setText(String.valueOf(quantidade));
         txtPreco.setText(String.valueOf(preco));
         this.id = id;
-
+        
         this.nome = txtNome.getText();
         this.descricao = txtDescricao.getText();
-        this.disponibilidade = (rdbDisponivel.isSelected())?true:false;
+        this.disponibilidade = (rdbDisponivel.isSelected()) ? true : false;
         this.preco = Double.parseDouble(txtPreco.getText());
         this.quantidade = Integer.parseInt(txtQuantidade.getText());
-
+        
         if (disponibilidade) {
             rdbDisponivel.setSelected(true);
         } else {
             rdbIndisponivel.setSelected(false);
         }
     }
-
+    
     public EditarProdutoView() {
         initComponents();
         setResizable(false);
@@ -84,6 +84,7 @@ public class EditarProdutoView extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         txtQuantidade = new javax.swing.JTextField();
         txtPreco = new javax.swing.JTextField();
+        btnExcluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -160,6 +161,16 @@ public class EditarProdutoView extends javax.swing.JFrame {
             }
         });
 
+        btnExcluir.setBackground(new java.awt.Color(255, 0, 51));
+        btnExcluir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnExcluir.setForeground(new java.awt.Color(255, 255, 255));
+        btnExcluir.setText("EXCLUIR");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -172,14 +183,15 @@ public class EditarProdutoView extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(119, 119, 119)
                         .addComponent(jLabel1))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(btnCancelar)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGap(35, 35, 35)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnExcluir)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnCancelar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel5)
                                 .addGroup(layout.createSequentialGroup()
@@ -230,7 +242,8 @@ public class EditarProdutoView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExcluir))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -252,20 +265,20 @@ public class EditarProdutoView extends javax.swing.JFrame {
             quantidade = Integer.parseInt(txtQuantidade.getText());
             nome = txtNome.getText();
             descricao = txtDescricao.getText();
-            disponibilidade = (rdbDisponivel.isSelected())?true:false;
+            disponibilidade = (rdbDisponivel.isSelected()) ? true : false;
             
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Por favor, insira um valor numérico válido para preço e quantidade");
             return;
         }
-
+        
         if (nome.isEmpty() || descricao.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos");
             return;
         }
-
+        
         Produto produto = new Produto(quantidade, disponibilidade, preco, nome, descricao);
-
+        
         if (new ProdutoDAO().editarProduto(id, produto)) {
             JOptionPane.showMessageDialog(null, "Produto editado com sucesso");
             dispose();
@@ -281,10 +294,10 @@ public class EditarProdutoView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtQuantidadeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtQuantidadeFocusLost
-
+        
         try {
             quantidade = Integer.parseInt(txtQuantidade.getText());
-
+            
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Por favor, insira um valor numérico válido");
             txtQuantidade.setText("");
@@ -301,13 +314,30 @@ public class EditarProdutoView extends javax.swing.JFrame {
         try {
             preco = Double.parseDouble(txtPreco.getText());
             return;
-
+            
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Por favor, insira um valor numérico válido");
             txtPreco.setText("");
             return;
-
+            
         }    }//GEN-LAST:event_txtPrecoFocusLost
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        Object[] options = {"Não desejo excluir", "Desejo excluir"};
+        int op = JOptionPane.showOptionDialog(null, "DESEJA EXCLUIR PERMANENTEMENTE \nESSE PRODUTO?", "Exclusão de Produto", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        
+        if (String.valueOf(op).equals("1")) {
+            if (new ProdutoDAO().deletProduto(id)) {
+            JOptionPane.showMessageDialog(null, "Produto Deletado com SUCESSO");
+            dispose();
+            return;
+
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Produto NÃO DELETADO");
+        return;
+
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -346,6 +376,7 @@ public class EditarProdutoView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnVoltar;
     private javax.swing.ButtonGroup buttonGroup1;
