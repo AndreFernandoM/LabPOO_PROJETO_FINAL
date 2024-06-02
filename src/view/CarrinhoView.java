@@ -50,7 +50,6 @@ public class CarrinhoView extends javax.swing.JFrame {
         m.addColumn("Nome");
         m.addColumn("Qntd");
         m.addColumn("Preço");
-//        m.addColumn("Total");
 
         tabCarrinho.setModel(m);
     }
@@ -251,7 +250,6 @@ public class CarrinhoView extends javax.swing.JFrame {
                 };
             }
             new CarrinhoDAO().deletarProdutoCarrinho(id);
-            System.out.println("Apagado");
         }
         configColumn();
 

@@ -24,39 +24,8 @@ public class CarrinhoDAO {
     public CarrinhoDAO() {
         this.con = Conexao.conectar();
     }
-
-    public boolean adicionarProdutoAoCarrinho(int idProduto, int quantidade) {
-        int idUsuario = SessaoUsuario.getInstance().getUsuarioLogado().getId();
-
-        try {
-            String sqlProduto = "SELECT preco FROM tb_produto WHERE id = ?";
-            cmd = con.prepareStatement(sqlProduto);
-            cmd.setInt(1, idProduto);
-            ResultSet rs = cmd.executeQuery();
-
-            if (rs.next()) {
-                double preco = rs.getDouble("preco");
-                double total = preco * quantidade;
-
-                String SQL = "INSERT INTO tb_carrinho (id_usuario, id_produto, quantidade, total) VALUES (?, ?, ?, ?)";
-                cmd = con.prepareStatement(SQL);
-                cmd.setInt(1, idUsuario);
-                cmd.setInt(2, idProduto);
-                cmd.setInt(3, quantidade);
-                cmd.setDouble(4, total);
-
-                return cmd.executeUpdate() > 0;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            System.err.println("Erro ao adicionar produto ao carrinho: " + e.getMessage());
-            return false;
-        } finally {
-            Conexao.desconectar(con);
-        }
-    }
-
+    
+    
     public List<Produto> getCarrinhoPorUsuario() {
         int idUsuario = SessaoUsuario.getInstance().getUsuarioLogado().getId();
 
@@ -91,6 +60,94 @@ public class CarrinhoDAO {
         }
     }
 
+
+
+    public boolean adicionarProdutoAoCarrinho(int idProduto, int quantidade) {
+    int idUsuario = SessaoUsuario.getInstance().getUsuarioLogado().getId();
+
+    try {
+        String checkSQL = "SELECT quantidade FROM tb_carrinho WHERE id_produto = ? AND id_usuario = ?";
+        cmd = con.prepareStatement(checkSQL);
+        cmd.setInt(1, idProduto);
+        cmd.setInt(2, idUsuario);
+        ResultSet rs = cmd.executeQuery();
+
+        if (rs.next()) {
+            int quantidadeAtual = rs.getInt("quantidade");
+            int novaQuantidade = quantidadeAtual + quantidade;
+
+            String updateSQL = "UPDATE tb_carrinho SET quantidade = ?, total = ? WHERE id_produto = ? AND id_usuario = ?";
+            cmd = con.prepareStatement(updateSQL);
+            cmd.setInt(1, novaQuantidade);
+
+            String sqlProduto = "SELECT preco FROM tb_produto WHERE id = ?";
+            PreparedStatement cmdProduto = con.prepareStatement(sqlProduto);
+            cmdProduto.setInt(1, idProduto);
+            ResultSet rsProduto = cmdProduto.executeQuery();
+            if (rsProduto.next()) {
+                double preco = rsProduto.getDouble("preco");
+                double total = preco * novaQuantidade;
+                cmd.setDouble(2, total);
+            } else {
+                return false; // Produto não encontrado
+            }
+
+            cmd.setInt(3, idProduto);
+            cmd.setInt(4, idUsuario);
+
+            return cmd.executeUpdate() > 0;
+        } else {
+            String sqlProduto = "SELECT preco FROM tb_produto WHERE id = ?";
+            cmd = con.prepareStatement(sqlProduto);
+            cmd.setInt(1, idProduto);
+            rs = cmd.executeQuery();
+
+            if (rs.next()) {
+                double preco = rs.getDouble("preco");
+                double total = preco * quantidade;
+
+                String SQL = "INSERT INTO tb_carrinho (id_usuario, id_produto, quantidade, total) VALUES (?, ?, ?, ?)";
+                cmd = con.prepareStatement(SQL);
+                cmd.setInt(1, idUsuario);
+                cmd.setInt(2, idProduto);
+                cmd.setInt(3, quantidade);
+                cmd.setDouble(4, total);
+
+                return cmd.executeUpdate() > 0;
+            } else {
+                return false;
+            }
+        }
+    } catch (Exception e) {
+        System.err.println("Erro ao adicionar produto ao carrinho: " + e.getMessage());
+        return false;
+    } finally {
+        Conexao.desconectar(con);
+    }
+}
+
+
+    private double obterPrecoProduto(int idProduto) {
+        try {
+            String sqlProduto = "SELECT preco FROM tb_produto WHERE id = ?";
+            cmd = con.prepareStatement(sqlProduto);
+            cmd.setInt(1, idProduto);
+            ResultSet rs = cmd.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("preco");
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao obter preço do produto: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    private double calcularTotal(int idProduto, int quantidade) {
+        double preco = obterPrecoProduto(idProduto);
+        return preco * quantidade;
+    }
+
     public boolean deletarProdutoCarrinho(int id) {
         try {
             String SQL = "DELETE FROM tb_carrinho WHERE id_produto=?";
@@ -110,7 +167,6 @@ public class CarrinhoDAO {
 
     public boolean diminuirProdutoCarrinho(int id) {
         try {
-            // Verificar a quantidade atual do produto no carrinho
             String checkSQL = "SELECT quantidade FROM tb_carrinho WHERE id_produto=?";
             cmd = con.prepareStatement(checkSQL);
             cmd.setInt(1, id);
@@ -120,7 +176,6 @@ public class CarrinhoDAO {
                 int quantidadeAtual = rs.getInt("quantidade");
 
                 if (quantidadeAtual > 1) {
-                    // Diminuir a quantidade em 1
                     String updateSQL = "UPDATE tb_carrinho SET quantidade=? WHERE id_produto=?";
                     PreparedStatement cmd2 = con.prepareStatement(updateSQL);
                     cmd2.setInt(1, quantidadeAtual - 1);
@@ -130,11 +185,9 @@ public class CarrinhoDAO {
 
                     return rowsAffected > 0;
                 } else {
-                    // Se a quantidade é 1, deletar o produto do carrinho
                     return deletarProdutoCarrinho(id);
                 }
             } else {
-                // Produto não encontrado no carrinho
                 return false;
             }
         } catch (Exception e) {
@@ -146,3 +199,4 @@ public class CarrinhoDAO {
     }
 
 }
+

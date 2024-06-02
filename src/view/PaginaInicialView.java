@@ -4,6 +4,12 @@
  */
 package view;
 
+import controller.ProdutoDAO;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import model.Produto;
+
 /**
  *
  * @author Andre Fernando Machado - 837864
@@ -18,7 +24,52 @@ public class PaginaInicialView extends javax.swing.JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         setTitle("Petshop SillyPet");
+        configColumn();
 
+    }
+    
+        private void configColumn() {
+        preencherTabela();
+        tabProdutos.getColumnModel().getColumn(0).setPreferredWidth(10);
+        tabProdutos.getColumnModel().getColumn(1).setPreferredWidth(50);
+        tabProdutos.getColumnModel().getColumn(2).setPreferredWidth(250);
+    }
+
+    private void configurarTabela() {
+        DefaultTableModel m = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        m.addColumn("ID");
+        m.addColumn("Nome");
+        m.addColumn("Descrição");
+        m.addColumn("Preço");
+
+        tabProdutos.setModel(m);
+    }
+
+    private void preencherTabela() {
+        configurarTabela();
+        DefaultTableModel m = (DefaultTableModel) tabProdutos.getModel();
+
+        ProdutoDAO prodtuo = new ProdutoDAO();
+        List<Produto> produtosAmostra = prodtuo.getProdutos();
+
+
+        for (Produto p : produtosAmostra) {
+            m.addRow(new Object[]{
+                p.getId(),
+                p.getNome(),
+                p.getDescricao(),
+                p.getPreco()
+            });
+        }
+
+
+        tabProdutos.setModel(m);
     }
 
     /**
@@ -38,7 +89,7 @@ public class PaginaInicialView extends javax.swing.JFrame {
         btnCarrinho = new javax.swing.JButton();
         btn_Sair = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tbl_produtos = new javax.swing.JTable();
+        tabProdutos = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         btnSobre = new javax.swing.JButton();
 
@@ -86,16 +137,38 @@ public class PaginaInicialView extends javax.swing.JFrame {
             }
         });
 
-        tbl_produtos.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-        tbl_produtos.setModel(new javax.swing.table.DefaultTableModel(
+        tabProdutos.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        tabProdutos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tabProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3"
             }
-        ));
-        jScrollPane1.setViewportView(tbl_produtos);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabProdutos.setComponentPopupMenu(btnSobre.getComponentPopupMenu());
+        tabProdutos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tabProdutos.setRowHeight(55);
+        tabProdutos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabProdutosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabProdutos);
+        if (tabProdutos.getColumnModel().getColumnCount() > 0) {
+            tabProdutos.getColumnModel().getColumn(0).setResizable(false);
+            tabProdutos.getColumnModel().getColumn(1).setResizable(false);
+            tabProdutos.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Novos Produtos:");
@@ -161,10 +234,10 @@ public class PaginaInicialView extends javax.swing.JFrame {
                             .addComponent(txt_pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnCarrinho)))
                     .addComponent(jLabel2))
-                .addGap(42, 42, 42)
-                .addComponent(jLabel4)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(btnSobre)
                 .addContainerGap())
@@ -194,6 +267,19 @@ public class PaginaInicialView extends javax.swing.JFrame {
         SobreView s = new SobreView();
         s.setVisible(true);
     }//GEN-LAST:event_btnSobreActionPerformed
+
+    private void tabProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabProdutosMouseClicked
+        int index = tabProdutos.getSelectedRow();
+        TableModel p = tabProdutos.getModel();
+
+
+        int id = Integer.parseInt(p.getValueAt(index, 0).toString());
+
+        ProdutoView addCarrinho = new ProdutoView(id);
+        addCarrinho.setVisible(true);
+
+
+    }//GEN-LAST:event_tabProdutosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -240,7 +326,7 @@ public class PaginaInicialView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tbl_produtos;
+    private javax.swing.JTable tabProdutos;
     private javax.swing.JTextField txt_pesquisar;
     // End of variables declaration//GEN-END:variables
 }

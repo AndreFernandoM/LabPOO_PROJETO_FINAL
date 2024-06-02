@@ -45,7 +45,36 @@ public class ProdutoDAO {
         }
     }
 
-    public List<Produto> getProdutos() {
+    public Produto getProduto(int id) {
+        try {
+            String SQL = "select * from tb_produto where id=?";
+            cmd = con.prepareStatement(SQL);
+            cmd.setInt(1, id);
+
+            ResultSet rs = cmd.executeQuery();
+
+            if (rs.next()) {
+                Produto p = new Produto(
+                        rs.getInt("id"),
+                        rs.getInt("quant"),
+                        rs.getBoolean("disponivel"),
+                        rs.getDouble("preco"),
+                        rs.getString("nome"),
+                        rs.getString("descricao"));
+
+                return p;
+            }
+        } catch (Exception e) {
+            System.err.print("erro: " + e.getMessage());
+            return null;
+        } finally {
+            Conexao.desconectar(con);
+        }
+        return null;
+    }
+
+
+public List<Produto> getProdutos() {
         try {
             String SQL = "select * from tb_produto";
             cmd = con.prepareStatement(SQL);
