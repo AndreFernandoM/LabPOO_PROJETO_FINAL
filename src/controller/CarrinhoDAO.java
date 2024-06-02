@@ -89,7 +89,7 @@ public class CarrinhoDAO {
                 double total = preco * novaQuantidade;
                 cmd.setDouble(2, total);
             } else {
-                return false; // Produto não encontrado
+                return false;
             }
 
             cmd.setInt(3, idProduto);
