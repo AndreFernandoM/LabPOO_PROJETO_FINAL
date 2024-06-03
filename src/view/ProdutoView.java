@@ -9,10 +9,11 @@ import java.awt.Color;
 import model.Produto;
 import controller.ProdutoDAO;
 import controller.CarrinhoDAO;
+import javax.swing.JOptionPane;
 
 /**
  *
- * @author Magi
+ * @author Andre Fernando Machado - 837864
  */
 public class ProdutoView extends javax.swing.JFrame {
 
@@ -49,8 +50,7 @@ public class ProdutoView extends javax.swing.JFrame {
 
         txtParcela.setText("10 x R$: " + String.valueOf(String.format("%.2f", ((p.getPreco() + parcela) / 10))));
         this.id = p.getId();
-
-        System.out.println(this.id);
+        
 
         this.precoFrete = (p.getPreco() + 10);
 
@@ -249,7 +249,7 @@ public class ProdutoView extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtParcela))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel6)
                         .addComponent(txtQuantidade)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -279,7 +279,8 @@ public class ProdutoView extends javax.swing.JFrame {
 
     private void btnCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarrinhoActionPerformed
         new CarrinhoDAO().adicionarProdutoAoCarrinho(this.id, 1);
-        System.out.println(this.id + " -> 1");
+        JOptionPane.showMessageDialog(null, "Produto Adicionado Ao Carrinho! ");
+        dispose();
 
 
     }//GEN-LAST:event_btnCarrinhoActionPerformed

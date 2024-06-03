@@ -45,7 +45,6 @@ public class UsuarioDAO {
                 return null;
             }
         } catch (Exception e) {
-            System.out.println("AQUI");
             System.err.println("ERRO: " + e.getMessage());
             return null;
         } finally {

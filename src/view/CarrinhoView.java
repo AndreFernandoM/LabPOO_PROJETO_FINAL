@@ -6,9 +6,11 @@ package view;
 
 import controller.CarrinhoDAO;
 import model.Produto;
+import model.SessaoUsuario;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 
@@ -18,10 +20,6 @@ import javax.swing.table.TableModel;
  */
 public class CarrinhoView extends javax.swing.JFrame {
 
-    /**
-     * Creates new form CarrinhoView
-     */
-    double carrinhTotal = 0.00;
 
     public CarrinhoView() {
         initComponents();

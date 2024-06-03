@@ -4,17 +4,31 @@
  */
 package view;
 
+import java.awt.event.ActionEvent;
+import java.sql.Timestamp;
+import java.util.List;
 import javax.swing.JOptionPane;
+
+import controller.VendasDAO;
+import controller.CarrinhoDAO;
+import controller.ProdutoDAO;
+import java.util.ArrayList;
+
+import model.Carrinho;
+
+import model.Produto;
+import model.Vendas;
+
+import java.util.List;
+import javax.swing.JOptionPane;
+import model.SessaoUsuario;
 
 /**
  *
- * @author Magi
+ * @author Andre Fernando Machado - 837864
  */
 public class PagamentoView extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Teste1
-     */
     public PagamentoView() {
         setUndecorated(true);
 
@@ -52,6 +66,7 @@ public class PagamentoView extends javax.swing.JFrame {
         txtCod = new javax.swing.JFormattedTextField();
         txtNum = new javax.swing.JFormattedTextField();
         jButton1 = new javax.swing.JButton();
+        btnTeste = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -123,6 +138,13 @@ public class PagamentoView extends javax.swing.JFrame {
             }
         });
 
+        btnTeste.setText("jButton2");
+        btnTeste.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTesteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -146,6 +168,8 @@ public class PagamentoView extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnTeste)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel8)
                         .addGap(107, 107, 107))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -201,11 +225,17 @@ public class PagamentoView extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 21, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 21, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnTeste)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtCod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTele, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -244,6 +274,8 @@ public class PagamentoView extends javax.swing.JFrame {
 
         }
         JOptionPane.showMessageDialog(null, "Compra Finalizada");
+        System.out.println(new VendasDAO().criarVenda());
+
         dispose();
         return;
 
@@ -253,6 +285,44 @@ public class PagamentoView extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnTesteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTesteActionPerformed
+        System.out.println("AAAAAAAAAAA");
+        System.out.println(new VendasDAO().criarVenda());
+
+//        System.out.println(new VendasDAO().getVendas());
+//        List<Produto> itensCarrinho = new CarrinhoDAO().getCarrinhoPorUsuario();
+//        int idUsuario = SessaoUsuario.getInstance().getUsuarioLogado().getId();
+//        double total = new CarrinhoDAO().obterPrecoProduto(idUsuario);
+//
+//        VendasDAO vendasDAO = new VendasDAO();
+//        List<DetalhesVenda> detalhes = new ArrayList<>();
+//        for (Produto produto : itensCarrinho) {
+//            DetalhesVenda detalhe = new DetalhesVenda(0, produto.getId(), produto.getQuantidade(), produto.getPreco());
+//            detalhes.add(detalhe);
+//        }
+//
+//        Vendas venda = new Vendas(0, idUsuario, total);
+//        int idVenda = vendasDAO.criarVenda(venda, detalhes);
+//
+//        if (idVenda != -1) {
+//            for (Produto produto : itensCarrinho) {
+//                DetalhesVenda detalhesVenda = new DetalhesVenda(idVenda, produto.getId(), produto.getQuantidade(), produto.getPreco());
+//                boolean sucesso = vendasDAO.adicionarDetalhesVenda(detalhesVenda);
+//                if (!sucesso) {
+//                    JOptionPane.showMessageDialog(this, "Erro ao adicionar detalhes da venda.", "Erro", JOptionPane.ERROR_MESSAGE);
+//                    return;
+//                }
+//            }
+//
+//            new CarrinhoDAO().limparCarrinho(idUsuario);
+//            JOptionPane.showMessageDialog(this, "Compra finalizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+//
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Erro ao finalizar a compra.", "Erro", JOptionPane.ERROR_MESSAGE);
+//        }
+
+    }//GEN-LAST:event_btnTesteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -292,6 +362,7 @@ public class PagamentoView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFinalizar;
+    private javax.swing.JButton btnTeste;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

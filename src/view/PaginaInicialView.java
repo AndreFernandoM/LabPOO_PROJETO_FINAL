@@ -51,26 +51,6 @@ public class PaginaInicialView extends javax.swing.JFrame {
         tabProdutos.setModel(m);
     }
 
-//    private void preencherTabela() {
-//        configurarTabela();
-//        DefaultTableModel m = (DefaultTableModel) tabProdutos.getModel();
-//
-//        ProdutoDAO prodtuo = new ProdutoDAO();
-//        List<Produto> produtosAmostra = prodtuo.getProdutos();
-//
-//        for (Produto p : produtosAmostra) {
-//            if (p.isDisponivel()) {
-//                m.addRow(new Object[]{
-//                    p.getId(),
-//                    p.getNome(),
-//                    p.getDescricao(),
-//                    p.getPreco()
-//                });
-//            }
-//        }
-//
-//        tabProdutos.setModel(m);
-//    }
     private void preencherTabela(String nome) {
         configurarTabela();
         DefaultTableModel m = (DefaultTableModel) tabProdutos.getModel();
@@ -85,7 +65,7 @@ public class PaginaInicialView extends javax.swing.JFrame {
                         p.getId(),
                         p.getNome(),
                         p.getDescricao(),
-                        p.getPreco()
+                        "R$ "+p.getPreco()
                     });
                 }
             }

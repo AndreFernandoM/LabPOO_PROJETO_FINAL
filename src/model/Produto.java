@@ -32,7 +32,6 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    // Getters e Setters
     public int getId() {
         return id;
     }

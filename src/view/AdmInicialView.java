@@ -10,9 +10,20 @@ import components.NewTableActionEvent;
 
 import controller.ProdutoDAO;
 import controller.UsuarioDAO;
-import model.Usuario;
-import model.Produto;
+import controller.VendasDAO;
+import controller.DetalhesComprasDAO;
+import java.awt.Color;
 
+import model.Usuario;
+import model.DetalhesCompras;
+
+import model.Produto;
+import model.Vendas;
+
+import java.util.HashMap;
+import java.sql.Timestamp;
+import java.util.Map;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -25,6 +36,10 @@ import javax.swing.table.TableModel;
 //      pesquisar usuario/produto por nome e checkbox de role/disponivel para JOIN 
 public class AdmInicialView extends javax.swing.JFrame {
 
+    int idVenda = 1;
+    double total = 0;
+    double faturamento = 0;
+
     /**
      * Creates new form AdmInicialView
      */
@@ -33,6 +48,7 @@ public class AdmInicialView extends javax.swing.JFrame {
 
         configColumnUsers();
         configColumnProds();
+        configColumnVendas();
 
         setResizable(false);
         setTitle("Tela de Administrador");
@@ -61,7 +77,7 @@ public class AdmInicialView extends javax.swing.JFrame {
             }
         };
 
-        m.addColumn("id");
+        m.addColumn("ID");
         m.addColumn("Email");
         m.addColumn("Adm");
         m.addColumn("Edit");
@@ -90,7 +106,7 @@ public class AdmInicialView extends javax.swing.JFrame {
             }
         };
 
-        g.addColumn("id");
+        g.addColumn("ID");
         g.addColumn("Nome");
         g.addColumn("Preco");
         g.addColumn("Quant");
@@ -105,9 +121,10 @@ public class AdmInicialView extends javax.swing.JFrame {
         configurarTabelaProds();
         DefaultTableModel g = (DefaultTableModel) tabProdutos.getModel();
 
-        for (Produto t : new ProdutoDAO().getProdutos()) {
+        for (Produto t : new ProdutoDAO().getAllProdutos()) {
+
             g.addRow(new Object[]{
-                t.getId(), t.getNome(), t.getPreco(), t.getQuantidade(), t.isDisponivel(), t.getDescricao()
+                t.getId(), t.getNome(), +t.getPreco(), t.getQuantidade(), t.isDisponivel(), t.getDescricao()
             });
         }
         tabProdutos.setModel(g);
@@ -118,10 +135,84 @@ public class AdmInicialView extends javax.swing.JFrame {
 
         tabProdutos.getColumnModel().getColumn(0).setPreferredWidth(35);
         tabProdutos.getColumnModel().getColumn(1).setPreferredWidth(125);
-        tabProdutos.getColumnModel().getColumn(2).setPreferredWidth(50);
+        tabProdutos.getColumnModel().getColumn(2).setPreferredWidth(80);
         tabProdutos.getColumnModel().getColumn(3).setPreferredWidth(75);
         tabProdutos.getColumnModel().getColumn(4).setPreferredWidth(90);
         tabProdutos.getColumnModel().getColumn(5).setPreferredWidth(255);
+    }
+
+    private void configurarTabelaVendas() {
+        DefaultTableModel v = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        v.addColumn("N° Venda");
+        v.addColumn("ID Cliente");
+        v.addColumn("IDs Produtos");
+        v.addColumn("Data");
+        v.addColumn("Total");
+
+        tabVendas.setModel(v);
+    }
+
+    private void preencherTabelaVendas() {
+        configurarTabelaVendas();
+        DefaultTableModel v = (DefaultTableModel) tabVendas.getModel();
+        DetalhesComprasDAO detalhesComprasDAO = new DetalhesComprasDAO();
+        Map<Integer, Map<Timestamp, List<Integer>>> detalhesComprasMap = detalhesComprasDAO.getProdutosCompradosNaMesmaHora();
+
+        for (Map.Entry<Integer, Map<Timestamp, List<Integer>>> entry : detalhesComprasMap.entrySet()) {
+            Integer idUsuario = entry.getKey();
+            Map<Timestamp, List<Integer>> detalhesPorData = entry.getValue();
+
+            for (Map.Entry<Timestamp, List<Integer>> detalhesData : detalhesPorData.entrySet()) {
+                Timestamp dataCompra = detalhesData.getKey();
+                List<Integer> idsProdutosComprados = detalhesData.getValue();
+                StringBuilder produtosComprados = new StringBuilder();
+                double valorTotal = 0.0;
+
+                for (Integer idProduto : idsProdutosComprados) {
+                    double precoProduto = new ProdutoDAO().getValorProduto(idProduto);
+                    produtosComprados.append(idProduto).append(", ");
+                    valorTotal += precoProduto;
+                }
+
+                if (produtosComprados.length() > 0) {
+                    produtosComprados.setLength(produtosComprados.length() - 2);
+                }
+                faturamento += valorTotal;
+
+                v.addRow(new Object[]{
+                    idVenda,
+                    idUsuario,
+                    produtosComprados.toString(),
+                    dataCompra,
+                    "R$ "+String.valueOf(String.format("%.2f", valorTotal))
+                });
+                idVenda++;
+            }
+            txtFaturamento.setText(String.valueOf(String.format("%.2f", faturamento)));
+
+        }
+    }
+
+
+    private void configColumnVendas() {
+
+        preencherTabelaVendas();
+        NewTableActionEvent event = new NewTableActionEvent() {
+            @Override
+            public void onEdit(int row) {
+            }
+        };
+
+        tabVendas.getColumnModel().getColumn(0).setPreferredWidth(50);
+        tabVendas.getColumnModel().getColumn(1).setPreferredWidth(55);
+        tabVendas.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tabVendas.getColumnModel().getColumn(3).setPreferredWidth(125);
+        tabVendas.getColumnModel().getColumn(4).setPreferredWidth(50);
     }
 
     /**
@@ -150,6 +241,15 @@ public class AdmInicialView extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         btnSair2 = new javax.swing.JButton();
         btnAtualizar = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        btnSair3 = new javax.swing.JButton();
+        btnAtualizar3 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tabVendas = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
+        txtFaturamento = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -246,7 +346,7 @@ public class AdmInicialView extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(btnSair)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(btnNovoProd, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -257,7 +357,7 @@ public class AdmInicialView extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Produtos", jPanel2);
@@ -294,6 +394,7 @@ public class AdmInicialView extends javax.swing.JFrame {
             tabUsuarios.getColumnModel().getColumn(1).setResizable(false);
             tabUsuarios.getColumnModel().getColumn(2).setResizable(false);
             tabUsuarios.getColumnModel().getColumn(3).setResizable(false);
+            tabUsuarios.getColumnModel().getColumn(3).setHeaderValue("Title 4");
         }
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo3 (Personalizado) (2).png"))); // NOI18N
@@ -343,7 +444,7 @@ public class AdmInicialView extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 14, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 16, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(btnSair2)
                         .addGap(36, 36, 36)
@@ -352,10 +453,115 @@ public class AdmInicialView extends javax.swing.JFrame {
                         .addComponent(btnAtualizar)
                         .addGap(3, 3, 3)))
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Usuarios", jPanel3);
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo3 (Personalizado) (2).png"))); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel6.setText("Vendas Realizadas");
+
+        btnSair3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSair3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logout.png"))); // NOI18N
+        btnSair3.setText("Sair");
+        btnSair3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSair3ActionPerformed(evt);
+            }
+        });
+
+        btnAtualizar3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/refresh.png"))); // NOI18N
+        btnAtualizar3.setText("Atualizar");
+        btnAtualizar3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtualizar3ActionPerformed(evt);
+            }
+        });
+
+        tabVendas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabVendas.setRowHeight(45);
+        tabVendas.getTableHeader().setReorderingAllowed(false);
+        tabVendas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabVendasMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tabVendas);
+        if (tabVendas.getColumnModel().getColumnCount() > 0) {
+            tabVendas.getColumnModel().getColumn(0).setResizable(false);
+            tabVendas.getColumnModel().getColumn(1).setResizable(false);
+            tabVendas.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel7.setText("Faturamento:   R$");
+
+        txtFaturamento.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane3)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(315, 315, 315)
+                                .addComponent(btnSair3))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnAtualizar3))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtFaturamento)
+                                .addGap(31, 31, 31)))))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(btnSair3)
+                        .addGap(36, 36, 36)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(btnAtualizar3))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtFaturamento, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Vendas", jPanel4);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -428,7 +634,6 @@ public class AdmInicialView extends javax.swing.JFrame {
         int index = tabProdutos.getSelectedRow();
         TableModel p = tabProdutos.getModel();
 
-
         int id = Integer.parseInt(p.getValueAt(index, 0).toString());
         int quantidade = Integer.parseInt(p.getValueAt(index, 3).toString());
         double preco = Double.parseDouble(p.getValueAt(index, 2).toString());
@@ -439,6 +644,18 @@ public class AdmInicialView extends javax.swing.JFrame {
         EditarProdutoView ep = new EditarProdutoView(id, quantidade, preco, nome, descricao, disponibilidade);
         ep.setVisible(true);
     }//GEN-LAST:event_tabProdutosMouseClicked
+
+    private void btnSair3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSair3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSair3ActionPerformed
+
+    private void btnAtualizar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizar3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAtualizar3ActionPerformed
+
+    private void tabVendasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabVendasMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabVendasMouseClicked
 
     /**
      * @param args the command line arguments
@@ -478,20 +695,29 @@ public class AdmInicialView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnAtualizar2;
+    private javax.swing.JButton btnAtualizar3;
     private javax.swing.JButton btnNovoProd;
     private javax.swing.JButton btnSair;
     private javax.swing.JButton btnSair2;
+    private javax.swing.JButton btnSair3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable tabProdutos;
     private javax.swing.JTable tabUsuarios;
+    private javax.swing.JTable tabVendas;
+    private javax.swing.JLabel txtFaturamento;
     // End of variables declaration//GEN-END:variables
 }

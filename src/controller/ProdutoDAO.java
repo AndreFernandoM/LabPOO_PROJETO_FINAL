@@ -40,8 +40,6 @@ public class ProdutoDAO {
         } catch (Exception e) {
             System.err.println("Erro ao criar produto: " + e.getMessage());
             return false;
-        } finally {
-            Conexao.desconectar(con);
         }
     }
 
@@ -67,16 +65,13 @@ public class ProdutoDAO {
         } catch (Exception e) {
             System.err.print("erro: " + e.getMessage());
             return null;
-        } finally {
-            Conexao.desconectar(con);
         }
         return null;
     }
-
-
-public List<Produto> getProdutos() {
+    
+    public List<Produto> getAllProdutos() {
         try {
-            String SQL = "select * from tb_produto";
+            String SQL = "SELECT * FROM tb_produto";
             cmd = con.prepareStatement(SQL);
 
             ResultSet rs = cmd.executeQuery();
@@ -97,8 +92,98 @@ public List<Produto> getProdutos() {
         } catch (Exception e) {
             System.err.print("erro: " + e.getMessage());
             return null;
-        } finally {
-            Conexao.desconectar(con);
+        }
+    }
+
+    public List<Produto> getProdutos() {
+        try {
+            String SQL = "SELECT * FROM tb_produto WHERE quant>0";
+            cmd = con.prepareStatement(SQL);
+
+            ResultSet rs = cmd.executeQuery();
+
+            List<Produto> lista = new ArrayList<>();
+
+            while (rs.next()) {
+                lista.add(
+                        new Produto(
+                                rs.getInt("id"),
+                                rs.getInt("quant"),
+                                rs.getBoolean("disponivel"),
+                                rs.getDouble("preco"),
+                                rs.getString("nome"),
+                                rs.getString("descricao")));
+            }
+            return lista;
+        } catch (Exception e) {
+            System.err.print("erro: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public double getValorProduto(int idProd) {
+        try {
+            String SQL = "SELECT preco FROM tb_produto WHERE id=?";
+            cmd = con.prepareStatement(SQL);
+            cmd.setInt(1, idProd);
+            ResultSet rs = cmd.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("preco");
+
+            }
+
+        } catch (Exception e) {
+            System.err.print("erro: " + e.getMessage());
+            return 0.00;
+        }
+        return 0;
+    }
+
+    public boolean diminuirQuantidade(int id) {
+        try {
+            Produto produto = getProduto(id);
+            int novaQuantidade = produto.getQuantidade() - 1;
+
+            if (novaQuantidade >= 0) {
+                String SQL = "UPDATE tb_produto SET quant=? WHERE id=?";
+                cmd = con.prepareStatement(SQL);
+                cmd.setInt(1, novaQuantidade);
+                cmd.setInt(2, id);
+
+                int rowsAffected = cmd.executeUpdate();
+
+                return rowsAffected > 0;
+            } else {
+                System.err.println("Erro: A quantidade do produto já é zero.");
+                return false;
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao diminuir quantidade: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean diminuirQuantidade(int id, int vezes) {
+        try {
+            Produto produto = getProduto(id);
+            int novaQuantidade = produto.getQuantidade() - vezes;
+
+            if (novaQuantidade >= 0) {
+                String SQL = "UPDATE tb_produto SET quant=? WHERE id=?";
+                cmd = con.prepareStatement(SQL);
+                cmd.setInt(1, novaQuantidade);
+                cmd.setInt(2, id);
+
+                int rowsAffected = cmd.executeUpdate();
+
+                return rowsAffected > 0;
+            } else {
+                System.err.println("Erro: A quantidade do produto já é zero.");
+                return false;
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao diminuir quantidade: " + e.getMessage());
+            return false;
         }
     }
 
@@ -149,8 +234,6 @@ public List<Produto> getProdutos() {
         } catch (Exception e) {
             System.err.println("Erro ao deletar produto: " + e.getMessage());
             return false;
-        } finally {
-            Conexao.desconectar(con);
         }
     }
 }

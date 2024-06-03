@@ -55,8 +55,6 @@ public class CarrinhoDAO {
         } catch (Exception e) {
             System.err.println("Erro ao obter carrinho: " + e.getMessage());
             return null;
-        } finally {
-            Conexao.desconectar(con);
         }
     }
 
@@ -121,8 +119,6 @@ public class CarrinhoDAO {
     } catch (Exception e) {
         System.err.println("Erro ao adicionar produto ao carrinho: " + e.getMessage());
         return false;
-    } finally {
-        Conexao.desconectar(con);
     }
 }
 
@@ -160,8 +156,6 @@ public class CarrinhoDAO {
         } catch (Exception e) {
             System.err.println("Erro ao deletar produto do carrinho: " + e.getMessage());
             return false;
-        } finally {
-            Conexao.desconectar(con);
         }
     }
 
@@ -193,8 +187,6 @@ public class CarrinhoDAO {
         } catch (Exception e) {
             System.err.println("Erro ao diminuir quantidade do produto no carrinho: " + e.getMessage());
             return false;
-        } finally {
-            Conexao.desconectar(con);
         }
     }
 
