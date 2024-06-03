@@ -189,7 +189,7 @@ public class AdmInicialView extends javax.swing.JFrame {
                     idUsuario,
                     produtosComprados.toString(),
                     dataCompra,
-                    "R$ "+String.valueOf(String.format("%.2f", valorTotal))
+                    "R$ " + String.valueOf(String.format("%.2f", valorTotal))
                 });
                 idVenda++;
             }
@@ -197,7 +197,6 @@ public class AdmInicialView extends javax.swing.JFrame {
 
         }
     }
-
 
     private void configColumnVendas() {
 
@@ -646,10 +645,13 @@ public class AdmInicialView extends javax.swing.JFrame {
     }//GEN-LAST:event_tabProdutosMouseClicked
 
     private void btnSair3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSair3ActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        LoginView f = new LoginView();
+        f.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_btnSair3ActionPerformed
 
     private void btnAtualizar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizar3ActionPerformed
+        configColumnVendas();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAtualizar3ActionPerformed
 
