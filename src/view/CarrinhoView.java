@@ -5,13 +5,19 @@
 package view;
 
 import controller.CarrinhoDAO;
+import java.awt.Component;
+import java.awt.Image;
 import model.Produto;
 import model.SessaoUsuario;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
 /**
@@ -30,8 +36,13 @@ public class CarrinhoView extends javax.swing.JFrame {
 
     private void configColumn() {
         preencherTabela();
-        tabCarrinho.getColumnModel().getColumn(0).setPreferredWidth(25);
+        tabCarrinho.setRowHeight(90);
+
+        tabCarrinho.getColumnModel().getColumn(0).setCellRenderer(new CarrinhoView.ImageRender());
+        tabCarrinho.getColumnModel().getColumn(0).setPreferredWidth(80);
+
         tabCarrinho.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tabCarrinho.getColumnModel().getColumn(2).setPreferredWidth(25);
 
     }
 
@@ -43,7 +54,7 @@ public class CarrinhoView extends javax.swing.JFrame {
             }
         };
 
-        m.addColumn("ID");
+        m.addColumn("Produto");
         m.addColumn("Nome");
         m.addColumn("Qntd");
         m.addColumn("Preço");
@@ -64,16 +75,28 @@ public class CarrinhoView extends javax.swing.JFrame {
             double totalProduto = p.getQuantidade() * p.getPreco();
             carrinhoTotal += totalProduto;
             m.addRow(new Object[]{
-                p.getId(),
+                p.getNome(),
                 p.getNome(),
                 p.getQuantidade(),
-                "R$ "+p.getPreco()
+                "R$ " + p.getPreco()
             });
         }
 
         txtCarrinhoTotal.setText(String.valueOf(String.format("%.2f", carrinhoTotal)));
 
         tabCarrinho.setModel(m);
+    }
+
+    private class ImageRender extends DefaultTableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            String fotoNome = value.toString();
+            ImageIcon imageIcon = new ImageIcon(
+                    new ImageIcon("src/images/" + fotoNome + ".jpg").getImage().getScaledInstance(90, 90, Image.SCALE_DEFAULT));
+            return new JLabel(imageIcon);
+        }
+
     }
 
     /**
@@ -246,7 +269,7 @@ public class CarrinhoView extends javax.swing.JFrame {
                     return;
                 };
             }
-                new CarrinhoDAO().deletarProdutoCarrinho(id);
+            new CarrinhoDAO().deletarProdutoCarrinho(id);
         }
         configColumn();
 

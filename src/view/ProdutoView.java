@@ -9,6 +9,8 @@ import java.awt.Color;
 import model.Produto;
 import controller.ProdutoDAO;
 import controller.CarrinhoDAO;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import javax.swing.JSpinner;
@@ -61,6 +63,10 @@ public class ProdutoView extends javax.swing.JFrame {
 
         this.precoFrete = (p.getPreco() + 10);
 
+        ImageIcon imgProd = new ImageIcon(
+                new ImageIcon("src/images/" + p.getNome() + ".jpg").getImage().getScaledInstance(177, 177, Image.SCALE_DEFAULT));
+        imgProduto.setIcon(imgProd);
+
     }
 
     /**
@@ -91,6 +97,7 @@ public class ProdutoView extends javax.swing.JFrame {
         txtPrecoFrete = new javax.swing.JLabel();
         txtCepValido = new javax.swing.JLabel();
         spnQuantidade = new javax.swing.JSpinner();
+        imgProduto = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Descrição");
@@ -120,10 +127,12 @@ public class ProdutoView extends javax.swing.JFrame {
         txtDescricao.setColumns(20);
         txtDescricao.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         txtDescricao.setForeground(new java.awt.Color(0, 0, 0));
+        txtDescricao.setLineWrap(true);
         txtDescricao.setRows(5);
         txtDescricao.setAutoscrolls(false);
         txtDescricao.setCaretColor(new java.awt.Color(0, 0, 0));
         txtDescricao.setEnabled(false);
+        txtDescricao.setFocusable(false);
         txtDescricao.setOpaque(false);
         jScrollPane2.setViewportView(txtDescricao);
 
@@ -225,25 +234,27 @@ public class ProdutoView extends javax.swing.JFrame {
                                 .addComponent(txtNome))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(50, 50, 50)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(txtParcela, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtParcela, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtPreco))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel6)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(jLabel3)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(txtPreco))
+                                                    .addComponent(jLabel2)
+                                                    .addComponent(jLabel4))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(imgProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jLabel6))
                                         .addGap(10, 10, 10)
-                                        .addComponent(txtQuantidade)
-                                        .addGap(2, 2, 2)))))
-                        .addGap(0, 44, Short.MAX_VALUE))
+                                        .addComponent(txtQuantidade)))))
+                        .addGap(44, 44, 44))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 518, Short.MAX_VALUE)
                         .addComponent(btnVoltar)))
                 .addContainerGap())
         );
@@ -254,23 +265,28 @@ public class ProdutoView extends javax.swing.JFrame {
                 .addComponent(btnVoltar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNome)
-                .addGap(35, 35, 35)
-                .addComponent(jLabel2)
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtPreco))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jLabel2)
+                        .addGap(35, 35, 35)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtPreco))
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtParcela))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel6)
-                        .addComponent(txtQuantidade)))
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addComponent(txtParcela)
+                        .addGap(14, 14, 14))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(imgProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(txtQuantidade))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -374,6 +390,7 @@ public class ProdutoView extends javax.swing.JFrame {
     private javax.swing.JButton btnCarrinho;
     private javax.swing.JButton btnFrete;
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JLabel imgProduto;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

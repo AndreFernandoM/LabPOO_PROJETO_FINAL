@@ -15,7 +15,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import model.Produto;
-import org.postgresql.util.GettableHashMap;
 
 /**
  *
@@ -65,42 +64,6 @@ public class PaginaInicialView extends javax.swing.JFrame {
         tabProdutos.setModel(m);
     }
 
-//    private void preencherTabela(String nome) {
-//        configurarTabela();
-//
-//        DefaultTableModel m = (DefaultTableModel) tabProdutos.getModel();
-//
-//        ProdutoDAO produtoDAO = new ProdutoDAO();
-//        List<Produto> produtosAmostra = produtoDAO.getProdutos();
-//
-//        if (nome.isBlank()) {
-//            for (Produto p : produtosAmostra) {
-//                if (p.isDisponivel()) {
-//                    m.addRow(new Object[]{
-//                        p.getNome(),
-//                        p.getNome(),
-//                        p.getDescricao(),
-//                        "R$ " + p.getPreco()
-//                    });
-//                }
-//            }
-//
-//        } else {
-//            for (Produto p : produtosAmostra) {
-//                if (p.isDisponivel() && p.getNome().equalsIgnoreCase(nome)) {
-//                    m.addRow(new Object[]{
-//                        p.getNome(), 
-//                        p.getNome(),
-//                        p.getDescricao(),
-//                        "R$ "+p.getPreco()
-//                    });
-//                    break;
-//                }
-//            }
-//        }
-//
-//        tabProdutos.setModel(m);
-//    }
     private void preencherTabela(String nome) {
         configurarTabela();
 
