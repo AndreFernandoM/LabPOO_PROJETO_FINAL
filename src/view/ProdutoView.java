@@ -11,12 +11,18 @@ import controller.ProdutoDAO;
 import controller.CarrinhoDAO;
 import javax.swing.JOptionPane;
 
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.JSpinner.NumberEditor;
+import javax.swing.SpinnerNumberModel;
+
 /**
  *
  * @author Andre Fernando Machado - 837864
  */
 public class ProdutoView extends javax.swing.JFrame {
 
+    int quantidadeProduto = 1;
     double parcela = 10;
 
     double precoFrete;
@@ -27,8 +33,9 @@ public class ProdutoView extends javax.swing.JFrame {
      */
     public ProdutoView() {
         setUndecorated(true);
-        initComponents();
         setResizable(false);
+        initComponents();
+
         setLocationRelativeTo(null);
         txtCepValido.setVisible(false);
 
@@ -42,6 +49,7 @@ public class ProdutoView extends javax.swing.JFrame {
         txtCepValido.setVisible(false);
 
         Produto p = new ProdutoDAO().getProduto(id);
+        SpinnerModel sp = new SpinnerNumberModel();
 
         txtNome.setText(p.getNome());
         txtDescricao.setText(p.getDescricao());
@@ -50,7 +58,6 @@ public class ProdutoView extends javax.swing.JFrame {
 
         txtParcela.setText("10 x R$: " + String.valueOf(String.format("%.2f", ((p.getPreco() + parcela) / 10))));
         this.id = p.getId();
-        
 
         this.precoFrete = (p.getPreco() + 10);
 
@@ -83,6 +90,7 @@ public class ProdutoView extends javax.swing.JFrame {
         txtQuantidade = new javax.swing.JLabel();
         txtPrecoFrete = new javax.swing.JLabel();
         txtCepValido = new javax.swing.JLabel();
+        spnQuantidade = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Descrição");
@@ -153,7 +161,7 @@ public class ProdutoView extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setText("Calcular FRETE:");
+        jLabel5.setText("Calcular com FRETE:");
 
         btnFrete.setText("Calcular");
         btnFrete.addActionListener(new java.awt.event.ActionListener() {
@@ -173,6 +181,15 @@ public class ProdutoView extends javax.swing.JFrame {
         txtCepValido.setFocusable(false);
         txtCepValido.setOpaque(true);
         txtCepValido.setRequestFocusEnabled(false);
+
+        spnQuantidade.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spnQuantidade.setEditor(new javax.swing.JSpinner.NumberEditor(spnQuantidade, ""));
+        spnQuantidade.setName("1"); // NOI18N
+        spnQuantidade.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnQuantidadeStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,11 +211,11 @@ public class ProdutoView extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnFrete)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnCarrinho)
-                                .addGap(50, 50, 50))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtPrecoFrete)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                .addComponent(spnQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtPrecoFrete))
+                        .addGap(12, 12, 12)
+                        .addComponent(btnCarrinho)
+                        .addGap(50, 50, 50))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -260,11 +277,12 @@ public class ProdutoView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtPrecoFrete))
-                .addGap(3, 3, 3)
+                .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCarrinho)
                     .addComponent(txtCalcFrete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnFrete))
+                    .addComponent(btnFrete)
+                    .addComponent(spnQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addComponent(txtCepValido)
                 .addGap(22, 22, 22))
@@ -278,9 +296,16 @@ public class ProdutoView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void btnCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarrinhoActionPerformed
-        new CarrinhoDAO().adicionarProdutoAoCarrinho(this.id, 1);
-        JOptionPane.showMessageDialog(null, "Produto Adicionado Ao Carrinho! ");
-        dispose();
+//        int maxAllowed = ;
+
+        if (!((Integer.parseInt(spnQuantidade.getValue().toString())) >= (new ProdutoDAO().getQuantProduto(this.id) - new CarrinhoDAO().getQuantCarrinho(this.id)))) {
+            new CarrinhoDAO().adicionarProdutoAoCarrinho(this.id, Integer.parseInt(spnQuantidade.getValue().toString()));
+            JOptionPane.showMessageDialog(null, "Produto Adicionado Ao Carrinho! ");
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Sem estoque disponivel, por favor diminua a quantidade");
+
+        }
 
 
     }//GEN-LAST:event_btnCarrinhoActionPerformed
@@ -303,6 +328,12 @@ public class ProdutoView extends javax.swing.JFrame {
         txtCepValido.setVisible(false);
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCalcFreteFocusGained
+
+    private void spnQuantidadeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnQuantidadeStateChanged
+        quantidadeProduto = spnQuantidade.getComponentCount();
+
+
+    }//GEN-LAST:event_spnQuantidadeStateChanged
 
     /**
      * @param args the command line arguments
@@ -350,6 +381,7 @@ public class ProdutoView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSpinner spnQuantidade;
     private javax.swing.JFormattedTextField txtCalcFrete;
     private javax.swing.JLabel txtCepValido;
     private javax.swing.JTextArea txtDescricao;

@@ -65,8 +65,15 @@ public class AdmInicialView extends javax.swing.JFrame {
         preencherTabelaUsers();
         tabUsuarios.getColumnModel().getColumn(3).setCellEditor(new NewTableActionCellEditor(event));
         tabUsuarios.getColumnModel().getColumn(3).setCellRenderer(new NewTableActionCellRender());
+        tabUsuarios.getColumnModel().getColumn(3).setResizable(false);
+        
         tabUsuarios.getColumnModel().getColumn(0).setPreferredWidth(5);
+        tabUsuarios.getColumnModel().getColumn(0).setResizable(false);
+        
+        tabUsuarios.getColumnModel().getColumn(2).setResizable(false);
+        
         tabUsuarios.getColumnModel().getColumn(1).setPreferredWidth(250);
+        tabUsuarios.getColumnModel().getColumn(1).setResizable(false);
     }
 
     private void configurarTabelaUsers() {
@@ -92,7 +99,7 @@ public class AdmInicialView extends javax.swing.JFrame {
 
         for (Usuario t : new UsuarioDAO().getUsuarios()) {
             m.addRow(new Object[]{
-                t.getId(), t.getEmail(), t.getRole()
+                t.getId(), t.getEmail(), t.getRole()?"Administrador":"Usuario"
             });
         }
         tabUsuarios.setModel(m);
@@ -124,7 +131,7 @@ public class AdmInicialView extends javax.swing.JFrame {
         for (Produto t : new ProdutoDAO().getAllProdutos()) {
 
             g.addRow(new Object[]{
-                t.getId(), t.getNome(), +t.getPreco(), t.getQuantidade(), t.isDisponivel(), t.getDescricao()
+                t.getId(), t.getNome(), +t.getPreco(), t.getQuantidade(), t.isDisponivel()?"Disponivel":"Indisponivel", t.getDescricao()
             });
         }
         tabProdutos.setModel(g);
@@ -134,11 +141,22 @@ public class AdmInicialView extends javax.swing.JFrame {
         preencherTabelaProds();
 
         tabProdutos.getColumnModel().getColumn(0).setPreferredWidth(35);
+        tabProdutos.getColumnModel().getColumn(0).setResizable(false);
+
         tabProdutos.getColumnModel().getColumn(1).setPreferredWidth(125);
+        tabProdutos.getColumnModel().getColumn(1).setResizable(false);
+
         tabProdutos.getColumnModel().getColumn(2).setPreferredWidth(80);
-        tabProdutos.getColumnModel().getColumn(3).setPreferredWidth(75);
-        tabProdutos.getColumnModel().getColumn(4).setPreferredWidth(90);
+        tabProdutos.getColumnModel().getColumn(2).setResizable(false);
+
+        tabProdutos.getColumnModel().getColumn(3).setPreferredWidth(65);
+        tabProdutos.getColumnModel().getColumn(3).setResizable(false);
+
+        tabProdutos.getColumnModel().getColumn(4).setPreferredWidth(110);
+        tabProdutos.getColumnModel().getColumn(4).setResizable(false);
+        
         tabProdutos.getColumnModel().getColumn(5).setPreferredWidth(255);
+        tabProdutos.getColumnModel().getColumn(5).setResizable(false);
     }
 
     private void configurarTabelaVendas() {

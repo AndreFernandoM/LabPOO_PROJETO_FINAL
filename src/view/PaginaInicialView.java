@@ -5,10 +5,17 @@
 package view;
 
 import controller.ProdutoDAO;
+import java.awt.Component;
+import java.awt.Image;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import model.Produto;
+import org.postgresql.util.GettableHashMap;
 
 /**
  *
@@ -24,15 +31,22 @@ public class PaginaInicialView extends javax.swing.JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         setTitle("Petshop SillyPet");
-        configColumn();
+        configColumn("");
 
     }
 
-    private void configColumn() {
-        preencherTabela("");
-        tabProdutos.getColumnModel().getColumn(0).setPreferredWidth(10);
+    private void configColumn(String stg) {
+        preencherTabela(stg);
+        tabProdutos.setRowHeight(90);
+        tabProdutos.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
+        tabProdutos.getColumnModel().getColumn(0).setPreferredWidth(50);
+
+        tabProdutos.getColumnModel().getColumn(1).setResizable(false);
         tabProdutos.getColumnModel().getColumn(1).setPreferredWidth(50);
+
+        tabProdutos.getColumnModel().getColumn(2).setResizable(false);
         tabProdutos.getColumnModel().getColumn(2).setPreferredWidth(250);
+        tabProdutos.getColumnModel().getColumn(3).setPreferredWidth(25);
     }
 
     private void configurarTabela() {
@@ -43,7 +57,7 @@ public class PaginaInicialView extends javax.swing.JFrame {
             }
         };
 
-        m.addColumn("ID");
+        m.addColumn("Produto");
         m.addColumn("Nome");
         m.addColumn("Descrição");
         m.addColumn("Preço");
@@ -51,41 +65,79 @@ public class PaginaInicialView extends javax.swing.JFrame {
         tabProdutos.setModel(m);
     }
 
+//    private void preencherTabela(String nome) {
+//        configurarTabela();
+//
+//        DefaultTableModel m = (DefaultTableModel) tabProdutos.getModel();
+//
+//        ProdutoDAO produtoDAO = new ProdutoDAO();
+//        List<Produto> produtosAmostra = produtoDAO.getProdutos();
+//
+//        if (nome.isBlank()) {
+//            for (Produto p : produtosAmostra) {
+//                if (p.isDisponivel()) {
+//                    m.addRow(new Object[]{
+//                        p.getNome(),
+//                        p.getNome(),
+//                        p.getDescricao(),
+//                        "R$ " + p.getPreco()
+//                    });
+//                }
+//            }
+//
+//        } else {
+//            for (Produto p : produtosAmostra) {
+//                if (p.isDisponivel() && p.getNome().equalsIgnoreCase(nome)) {
+//                    m.addRow(new Object[]{
+//                        p.getNome(), 
+//                        p.getNome(),
+//                        p.getDescricao(),
+//                        "R$ "+p.getPreco()
+//                    });
+//                    break;
+//                }
+//            }
+//        }
+//
+//        tabProdutos.setModel(m);
+//    }
     private void preencherTabela(String nome) {
         configurarTabela();
+
         DefaultTableModel m = (DefaultTableModel) tabProdutos.getModel();
 
         ProdutoDAO produtoDAO = new ProdutoDAO();
         List<Produto> produtosAmostra = produtoDAO.getProdutos();
 
-        if (nome.isBlank()) {
-            for (Produto p : produtosAmostra) {
-                if (p.isDisponivel()) {
-                    m.addRow(new Object[]{
-                        p.getId(),
-                        p.getNome(),
-                        p.getDescricao(),
-                        "R$ "+p.getPreco()
-                    });
-                }
-            }
+        String searchTerm = nome.toLowerCase();
 
-        } else {
-            for (Produto p : produtosAmostra) {
-                if (p.isDisponivel() && p.getNome().equalsIgnoreCase(nome)) {
+        for (Produto p : produtosAmostra) {
+            if (p.isDisponivel()) {
+                String produtoNome = p.getNome().toLowerCase();
+                if (produtoNome.contains(searchTerm)) {
                     m.addRow(new Object[]{
-                        p.getId(),
+                        p.getNome(), 
                         p.getNome(),
                         p.getDescricao(),
-                        p.getPreco()
+                        String.format("R$ %.2f", p.getPreco())
                     });
-                    break;
                 }
             }
         }
-        
 
         tabProdutos.setModel(m);
+    }
+
+    private class ImageRender extends DefaultTableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            String fotoNome = value.toString();
+            ImageIcon imageIcon = new ImageIcon(
+                    new ImageIcon("src/images/" + fotoNome + ".jpg").getImage().getScaledInstance(90, 90, Image.SCALE_DEFAULT));
+            return new JLabel(imageIcon);
+        }
+
     }
 
     /**
@@ -269,9 +321,7 @@ public class PaginaInicialView extends javax.swing.JFrame {
 
     private void txtPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPesquisarActionPerformed
         String textoPesquisa = txtPesquisar.getText();
-        configurarTabela();
-
-        preencherTabela(textoPesquisa);
+        configColumn(textoPesquisa);
     }//GEN-LAST:event_txtPesquisarActionPerformed
 
     private void btn_SairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SairActionPerformed
@@ -296,7 +346,7 @@ public class PaginaInicialView extends javax.swing.JFrame {
         int index = tabProdutos.getSelectedRow();
         TableModel p = tabProdutos.getModel();
 
-        int id = Integer.parseInt(p.getValueAt(index, 0).toString());
+        int id = new ProdutoDAO().getProdutoIdByNome(p.getValueAt(index, 0).toString());
 
         ProdutoView addCarrinho = new ProdutoView(id);
         addCarrinho.setVisible(true);

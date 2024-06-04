@@ -88,31 +88,7 @@ public class UsuarioDAO {
         }
     }
 
-    public List<Usuario> pesquisarPorEmail(String email) {
-        try {
-            String SQL = "select * from tb_usuario where email like ?";
-            cmd = con.prepareStatement(SQL);
-            cmd.setString(1, '%' + email + '%');
-
-            ResultSet rs = cmd.executeQuery();
-
-            List<Usuario> lista = new ArrayList<>();
-
-            while (rs.next()) {
-                lista.add(
-                        new Usuario(
-                                rs.getInt("id"),
-                                rs.getString("email"),
-                                rs.getString("senha")));
-            }
-            return lista;
-        } catch (Exception e) {
-            System.err.print("erro: " + e.getMessage());
-            return null;
-        } finally {
-            Conexao.desconectar(con);
-        }
-    }
+   
 
     public boolean checkEmailDuplicado(String email) {
         try {

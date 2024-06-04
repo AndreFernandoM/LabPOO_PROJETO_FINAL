@@ -68,7 +68,7 @@ public class ProdutoDAO {
         }
         return null;
     }
-    
+
     public List<Produto> getAllProdutos() {
         try {
             String SQL = "SELECT * FROM tb_produto";
@@ -119,6 +119,41 @@ public class ProdutoDAO {
             System.err.print("erro: " + e.getMessage());
             return null;
         }
+    }
+
+    public int getProdutoIdByNome(String nome) {
+        try {
+            String SQL = "select id from tb_produto where nome=?";
+            cmd = con.prepareStatement(SQL);
+            cmd.setString(1, nome);
+
+            ResultSet rs = cmd.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (Exception e) {
+            System.err.print("erro: " + e.getMessage());
+            return 0;
+        }
+        return 0;
+    }
+
+    public int getQuantProduto(int idProd) {
+        try {
+            String SQL = "SELECT quant FROM tb_produto WHERE id=?";
+            cmd = con.prepareStatement(SQL);
+            cmd.setInt(1, idProd);
+            ResultSet rs = cmd.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("quant");
+            }
+
+        } catch (Exception e) {
+            System.err.print("erro: " + e.getMessage());
+            return 0;
+        }
+        return 0;
     }
 
     public double getValorProduto(int idProd) {
@@ -235,5 +270,26 @@ public class ProdutoDAO {
             System.err.println("Erro ao deletar produto: " + e.getMessage());
             return false;
         }
+    }
+    
+        private double obterPrecoProduto(int idProduto) {
+        try {
+            String sqlProduto = "SELECT preco FROM tb_produto WHERE id = ?";
+            cmd = con.prepareStatement(sqlProduto);
+            cmd.setInt(1, idProduto);
+            ResultSet rs = cmd.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("preco");
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao obter preço do produto: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    private double calcularTotal(int idProduto, int quantidade) {
+        double preco = obterPrecoProduto(idProduto);
+        return preco * quantidade;
     }
 }

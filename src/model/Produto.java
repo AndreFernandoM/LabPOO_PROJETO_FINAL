@@ -82,7 +82,7 @@ public class Produto {
 
     @Override
     public String toString() {
-        return "Produto: " +getNome()+ "\nPreço: "+getPreco();
+        return "Produto: " +getNome();
     }
 }
 

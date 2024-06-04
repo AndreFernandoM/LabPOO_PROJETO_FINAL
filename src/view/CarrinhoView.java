@@ -20,7 +20,6 @@ import javax.swing.table.TableModel;
  */
 public class CarrinhoView extends javax.swing.JFrame {
 
-
     public CarrinhoView() {
         initComponents();
         configColumn();
@@ -68,7 +67,7 @@ public class CarrinhoView extends javax.swing.JFrame {
                 p.getId(),
                 p.getNome(),
                 p.getQuantidade(),
-                p.getPreco()
+                "R$ "+p.getPreco()
             });
         }
 
@@ -234,10 +233,10 @@ public class CarrinhoView extends javax.swing.JFrame {
         int qnt = Integer.parseInt(p.getValueAt(index, 2).toString());
 
         if (qnt < 2) {
-            if (new CarrinhoDAO().deletarProdutoCarrinho(id)) {;
+            if (new CarrinhoDAO().deletarProdutoCarrinho(id)) {
                 configColumn();
                 JOptionPane.showMessageDialog(null, "apagado");
-            };
+            }
         } else {
             Object[] options = {"Excluir do Carrinho", "Remover Apenas 1 unidade"};
             int op = JOptionPane.showOptionDialog(null, "Deseja Apagar o produto ou Remover 1 unidade?", "Edição do Carrinho", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
@@ -247,7 +246,7 @@ public class CarrinhoView extends javax.swing.JFrame {
                     return;
                 };
             }
-            new CarrinhoDAO().deletarProdutoCarrinho(id);
+                new CarrinhoDAO().deletarProdutoCarrinho(id);
         }
         configColumn();
 
