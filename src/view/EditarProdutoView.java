@@ -14,7 +14,7 @@ import view.AdmInicialView;
  * @author Andre Fernando Machado - 837864
  */
 public class EditarProdutoView extends javax.swing.JFrame {
-    
+
     private int id;
     String nome;
     String descricao;
@@ -31,26 +31,26 @@ public class EditarProdutoView extends javax.swing.JFrame {
         setResizable(false);
         setTitle("Edição de Produto");
         setLocationRelativeTo(null);
-        
+
         txtNome.setText(nome);
         txtDescricao.setText(descricao);
         txtQuantidade.setText(String.valueOf(quantidade));
         txtPreco.setText(String.valueOf(preco));
         this.id = id;
-        
+
         this.nome = txtNome.getText();
         this.descricao = txtDescricao.getText();
         this.disponibilidade = (rdbDisponivel.isSelected()) ? true : false;
         this.preco = Double.parseDouble(txtPreco.getText());
         this.quantidade = Integer.parseInt(txtQuantidade.getText());
-        
+
         if (disponibilidade) {
             rdbDisponivel.setSelected(true);
         } else {
             rdbIndisponivel.setSelected(false);
         }
     }
-    
+
     public EditarProdutoView() {
         initComponents();
         setResizable(false);
@@ -251,7 +251,8 @@ public class EditarProdutoView extends javax.swing.JFrame {
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         dispose();
-
+        AdmInicialView ep = new AdmInicialView();
+        ep.setVisible(true);
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void rdbDisponivelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbDisponivelActionPerformed
@@ -264,20 +265,20 @@ public class EditarProdutoView extends javax.swing.JFrame {
             quantidade = Integer.parseInt(txtQuantidade.getText());
             nome = txtNome.getText();
             descricao = txtDescricao.getText();
-            disponibilidade = (rdbDisponivel.isSelected()) ? true : false;
-            
+            disponibilidade = quantidade <= 0 ? false : (rdbDisponivel.isSelected()) ? true : false;
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Por favor, insira um valor numérico válido para preço e quantidade");
             return;
         }
-        
+
         if (nome.isEmpty() || descricao.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos");
             return;
         }
-        
+
         Produto produto = new Produto(quantidade, disponibilidade, preco, nome, descricao);
-        
+
         if (new ProdutoDAO().editarProduto(id, produto)) {
             JOptionPane.showMessageDialog(null, "Produto editado com sucesso");
             dispose();
@@ -289,14 +290,15 @@ public class EditarProdutoView extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
-
+        AdmInicialView ep = new AdmInicialView();
+        ep.setVisible(true);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtQuantidadeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtQuantidadeFocusLost
-        
+
         try {
             quantidade = Integer.parseInt(txtQuantidade.getText());
-            
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Por favor, insira um valor numérico válido");
             txtQuantidade.setText("");
@@ -313,23 +315,25 @@ public class EditarProdutoView extends javax.swing.JFrame {
         try {
             preco = Double.parseDouble(txtPreco.getText());
             return;
-            
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Por favor, insira um valor numérico válido");
             txtPreco.setText("");
             return;
-            
+
         }    }//GEN-LAST:event_txtPrecoFocusLost
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         Object[] options = {"Não desejo excluir", "Desejo excluir"};
         int op = JOptionPane.showOptionDialog(null, "DESEJA EXCLUIR PERMANENTEMENTE \nESSE PRODUTO?", "Exclusão de Produto", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-        
+
         if (String.valueOf(op).equals("1")) {
             if (new ProdutoDAO().deletProduto(id)) {
-            JOptionPane.showMessageDialog(null, "Produto Deletado com SUCESSO");
-            dispose();
-            return;
+                JOptionPane.showMessageDialog(null, "Produto Deletado com SUCESSO");
+                dispose();
+                AdmInicialView ep = new AdmInicialView();
+                ep.setVisible(true);
+                return;
 
             }
         }

@@ -219,7 +219,7 @@ public class CadastroProduto extends javax.swing.JFrame {
     private void btnCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarActionPerformed
         String nome = txtNome.getText();
         String descricao = txtDescricao.getText();
-        boolean disponibilidade = (rdbDisponivel.isSelected()) ? true : false;
+        boolean disponibilidade = Integer.parseInt(txtQuantidade.getText()) <= 0 ? false : (rdbDisponivel.isSelected()) ? true : false;
 
         if (nome.isEmpty() || descricao.isEmpty() || txtPreco.getText().isEmpty() || txtQuantidade.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Por favor preencher todos os campos");;

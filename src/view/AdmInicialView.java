@@ -10,17 +10,12 @@ import components.NewTableActionEvent;
 
 import controller.ProdutoDAO;
 import controller.UsuarioDAO;
-import controller.VendasDAO;
 import controller.DetalhesComprasDAO;
-import java.awt.Color;
 
 import model.Usuario;
-import model.DetalhesCompras;
 
 import model.Produto;
-import model.Vendas;
 
-import java.util.HashMap;
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.List;
@@ -40,9 +35,6 @@ public class AdmInicialView extends javax.swing.JFrame {
     double total = 0;
     double faturamento = 0;
 
-    /**
-     * Creates new form AdmInicialView
-     */
     public AdmInicialView() {
         initComponents();
 
@@ -177,6 +169,7 @@ public class AdmInicialView extends javax.swing.JFrame {
 
     private void preencherTabelaVendas() {
         configurarTabelaVendas();
+        idVenda=1;
         DefaultTableModel v = (DefaultTableModel) tabVendas.getModel();
         DetalhesComprasDAO detalhesComprasDAO = new DetalhesComprasDAO();
         Map<Integer, Map<Timestamp, List<Integer>>> detalhesComprasMap = detalhesComprasDAO.getProdutosCompradosNaMesmaHora();
@@ -658,8 +651,12 @@ public class AdmInicialView extends javax.swing.JFrame {
         String descricao = p.getValueAt(index, 5).toString();
         boolean disponibilidade = p.getValueAt(index, 4).toString().equals("Disponível");
 
+
+        
+        dispose();
         EditarProdutoView ep = new EditarProdutoView(id, quantidade, preco, nome, descricao, disponibilidade);
         ep.setVisible(true);
+        
     }//GEN-LAST:event_tabProdutosMouseClicked
 
     private void btnSair3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSair3ActionPerformed
@@ -669,6 +666,7 @@ public class AdmInicialView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSair3ActionPerformed
 
     private void btnAtualizar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizar3ActionPerformed
+        faturamento = 0;
         configColumnVendas();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAtualizar3ActionPerformed

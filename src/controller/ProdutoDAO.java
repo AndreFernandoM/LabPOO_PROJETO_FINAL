@@ -87,6 +87,7 @@ public class ProdutoDAO {
                                 rs.getDouble("preco"),
                                 rs.getString("nome"),
                                 rs.getString("descricao")));
+
             }
             return lista;
         } catch (Exception e) {
@@ -259,6 +260,21 @@ public class ProdutoDAO {
                 cmd2.close();
             }
 
+            String checkVendasSQL = "SELECT COUNT(*) FROM tb_vendas WHERE id_produto = ?";
+            cmd = con.prepareStatement(checkVendasSQL);
+            cmd.setInt(1, id);
+            ResultSet rsVendas = cmd.executeQuery();
+            rsVendas.next();
+            int countVendas = rsVendas.getInt(1);
+
+            if (countVendas > 0) {
+                String deleteVendasSQL = "DELETE FROM tb_vendas WHERE id_produto=?";
+                PreparedStatement cmd3 = con.prepareStatement(deleteVendasSQL);
+                cmd3.setInt(1, id);
+                cmd3.executeUpdate();
+                cmd3.close();
+            }
+
             String deleteProdutoSQL = "DELETE FROM tb_produto WHERE id=?";
             PreparedStatement cmd3 = con.prepareStatement(deleteProdutoSQL);
             cmd3.setInt(1, id);
@@ -271,8 +287,8 @@ public class ProdutoDAO {
             return false;
         }
     }
-    
-        private double obterPrecoProduto(int idProduto) {
+
+    private double obterPrecoProduto(int idProduto) {
         try {
             String sqlProduto = "SELECT preco FROM tb_produto WHERE id = ?";
             cmd = con.prepareStatement(sqlProduto);
