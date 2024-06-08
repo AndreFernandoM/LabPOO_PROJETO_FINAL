@@ -312,14 +312,11 @@ public class ProdutoView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 //TODO: ARRUMAR ADICIONAR NO CARRINHO 
     private void btnCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarrinhoActionPerformed
-        int maxAllowed = Integer.parseInt(spnQuantidade.getValue().toString());
-        System.out.println(maxAllowed);
+        int insertedValue = Integer.parseInt(spnQuantidade.getValue().toString());
         int quantAtual = new ProdutoDAO().getQuantProduto(this.id) - new CarrinhoDAO().getQuantCarrinho(this.id);
-        System.out.println(quantAtual);
+
         
-        System.out.println(String.valueOf(txtQuantidade.getText()));
-        
-        if (!((Integer.parseInt(spnQuantidade.getValue().toString())) >= (new ProdutoDAO().getQuantProduto(this.id) - new CarrinhoDAO().getQuantCarrinho(this.id)))) {
+        if (!(insertedValue > quantAtual)) {
             new CarrinhoDAO().adicionarProdutoAoCarrinho(this.id, Integer.parseInt(spnQuantidade.getValue().toString()));
             JOptionPane.showMessageDialog(null, "Produto Adicionado Ao Carrinho! ");
             dispose();
