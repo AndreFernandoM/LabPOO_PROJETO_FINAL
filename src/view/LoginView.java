@@ -48,7 +48,9 @@ public class LoginView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btnEntrar.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        btnEntrar.setBackground(new java.awt.Color(255, 255, 255));
+        btnEntrar.setFont(new java.awt.Font("Roboto", 1, 12)); // NOI18N
+        btnEntrar.setForeground(new java.awt.Color(0, 0, 0));
         btnEntrar.setText("Entrar");
         btnEntrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

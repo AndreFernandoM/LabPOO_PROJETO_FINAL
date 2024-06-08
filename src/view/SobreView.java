@@ -101,6 +101,9 @@ public class SobreView extends javax.swing.JFrame {
             }
         });
 
+        btnVoltar.setBackground(new java.awt.Color(255, 255, 255));
+        btnVoltar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnVoltar.setForeground(new java.awt.Color(0, 0, 0));
         btnVoltar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow-left.png"))); // NOI18N
         btnVoltar.setText("Voltar");
         btnVoltar.addActionListener(new java.awt.event.ActionListener() {

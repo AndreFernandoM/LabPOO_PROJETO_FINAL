@@ -157,6 +157,9 @@ public class PaginaInicialView extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Carrinho");
 
+        btnCarrinho.setBackground(new java.awt.Color(255, 255, 255));
+        btnCarrinho.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCarrinho.setForeground(new java.awt.Color(0, 0, 0));
         btnCarrinho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/shopping-cart-empty-side-view.png"))); // NOI18N
         btnCarrinho.setText("Compras");
         btnCarrinho.addActionListener(new java.awt.event.ActionListener() {
@@ -165,6 +168,9 @@ public class PaginaInicialView extends javax.swing.JFrame {
             }
         });
 
+        btn_Sair.setBackground(new java.awt.Color(255, 255, 255));
+        btn_Sair.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_Sair.setForeground(new java.awt.Color(255, 0, 0));
         btn_Sair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logout.png"))); // NOI18N
         btn_Sair.setText("SAIR");
         btn_Sair.addActionListener(new java.awt.event.ActionListener() {
@@ -209,6 +215,9 @@ public class PaginaInicialView extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Novos Produtos:");
 
+        btnSobre.setBackground(new java.awt.Color(255, 255, 255));
+        btnSobre.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSobre.setForeground(new java.awt.Color(0, 0, 0));
         btnSobre.setText("Sobre");
         btnSobre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

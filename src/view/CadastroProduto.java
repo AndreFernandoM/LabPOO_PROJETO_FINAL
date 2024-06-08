@@ -61,6 +61,9 @@ public class CadastroProduto extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Nome do Produto");
 
+        btnVoltar.setBackground(new java.awt.Color(255, 255, 255));
+        btnVoltar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnVoltar.setForeground(new java.awt.Color(255, 0, 0));
         btnVoltar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow-left.png"))); // NOI18N
         btnVoltar.setText("Voltar");
         btnVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -96,6 +99,9 @@ public class CadastroProduto extends javax.swing.JFrame {
             }
         });
 
+        btnCriar.setBackground(new java.awt.Color(255, 255, 255));
+        btnCriar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCriar.setForeground(new java.awt.Color(0, 0, 0));
         btnCriar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/plus-sign.png"))); // NOI18N
         btnCriar.setText("Criar Produto");
         btnCriar.addActionListener(new java.awt.event.ActionListener() {
@@ -104,6 +110,9 @@ public class CadastroProduto extends javax.swing.JFrame {
             }
         });
 
+        btnCancelar.setBackground(new java.awt.Color(255, 255, 255));
+        btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

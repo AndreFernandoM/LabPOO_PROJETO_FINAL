@@ -83,7 +83,9 @@ public class CriarUsuarioView extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         jLabel4.setText("Confirmar Senha");
 
-        btnSalvar.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        btnSalvar.setBackground(new java.awt.Color(255, 255, 255));
+        btnSalvar.setFont(new java.awt.Font("Roboto", 1, 12)); // NOI18N
+        btnSalvar.setForeground(new java.awt.Color(0, 0, 0));
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,7 +93,9 @@ public class CriarUsuarioView extends javax.swing.JFrame {
             }
         });
 
-        btnCancelar.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        btnCancelar.setBackground(new java.awt.Color(255, 255, 255));
+        btnCancelar.setFont(new java.awt.Font("Roboto", 1, 12)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(255, 0, 0));
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

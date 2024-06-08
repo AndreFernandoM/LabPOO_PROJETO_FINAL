@@ -266,7 +266,9 @@ public class AdmInicialView extends javax.swing.JFrame {
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo3 (Personalizado) (2).png"))); // NOI18N
 
+        btnSair.setBackground(new java.awt.Color(255, 255, 255));
         btnSair.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSair.setForeground(new java.awt.Color(255, 0, 0));
         btnSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logout.png"))); // NOI18N
         btnSair.setText("Sair");
         btnSair.addActionListener(new java.awt.event.ActionListener() {
@@ -312,6 +314,9 @@ public class AdmInicialView extends javax.swing.JFrame {
             tabProdutos.getColumnModel().getColumn(3).setResizable(false);
         }
 
+        btnNovoProd.setBackground(new java.awt.Color(255, 255, 255));
+        btnNovoProd.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnNovoProd.setForeground(new java.awt.Color(0, 0, 0));
         btnNovoProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/plus-sign.png"))); // NOI18N
         btnNovoProd.setText("Novo Produto");
         btnNovoProd.addActionListener(new java.awt.event.ActionListener() {
@@ -320,6 +325,9 @@ public class AdmInicialView extends javax.swing.JFrame {
             }
         });
 
+        btnAtualizar2.setBackground(new java.awt.Color(255, 255, 255));
+        btnAtualizar2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAtualizar2.setForeground(new java.awt.Color(0, 0, 0));
         btnAtualizar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/refresh.png"))); // NOI18N
         btnAtualizar2.setText("Atualizar");
         btnAtualizar2.addActionListener(new java.awt.event.ActionListener() {
@@ -409,7 +417,9 @@ public class AdmInicialView extends javax.swing.JFrame {
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo3 (Personalizado) (2).png"))); // NOI18N
 
+        btnSair2.setBackground(new java.awt.Color(255, 255, 255));
         btnSair2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSair2.setForeground(new java.awt.Color(255, 0, 0));
         btnSair2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logout.png"))); // NOI18N
         btnSair2.setText("Sair");
         btnSair2.addActionListener(new java.awt.event.ActionListener() {
@@ -418,6 +428,9 @@ public class AdmInicialView extends javax.swing.JFrame {
             }
         });
 
+        btnAtualizar.setBackground(new java.awt.Color(255, 255, 255));
+        btnAtualizar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAtualizar.setForeground(new java.awt.Color(0, 0, 0));
         btnAtualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/refresh.png"))); // NOI18N
         btnAtualizar.setText("Atualizar");
         btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -473,7 +486,9 @@ public class AdmInicialView extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setText("Vendas Realizadas");
 
+        btnSair3.setBackground(new java.awt.Color(255, 255, 255));
         btnSair3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSair3.setForeground(new java.awt.Color(255, 0, 0));
         btnSair3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logout.png"))); // NOI18N
         btnSair3.setText("Sair");
         btnSair3.addActionListener(new java.awt.event.ActionListener() {
@@ -482,6 +497,9 @@ public class AdmInicialView extends javax.swing.JFrame {
             }
         });
 
+        btnAtualizar3.setBackground(new java.awt.Color(255, 255, 255));
+        btnAtualizar3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAtualizar3.setForeground(new java.awt.Color(0, 0, 0));
         btnAtualizar3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/refresh.png"))); // NOI18N
         btnAtualizar3.setText("Atualizar");
         btnAtualizar3.addActionListener(new java.awt.event.ActionListener() {
@@ -536,38 +554,38 @@ public class AdmInicialView extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(315, 315, 315)
-                                .addComponent(btnSair3))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnAtualizar3))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtFaturamento)
-                                .addGap(31, 31, 31)))))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                    .addComponent(jLabel6)
+                                    .addGap(134, 134, 134)
+                                    .addComponent(btnAtualizar3))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                    .addComponent(jLabel7)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtFaturamento)
+                                    .addGap(31, 31, 31)))
+                            .addComponent(btnSair3, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(btnSair3)
-                        .addGap(36, 36, 36)
+                        .addGap(30, 30, 30)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(btnAtualizar3))))
+                            .addComponent(btnAtualizar3)))
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtFaturamento, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -662,7 +680,7 @@ public class AdmInicialView extends javax.swing.JFrame {
     private void btnSair3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSair3ActionPerformed
         dispose();
         LoginView f = new LoginView();
-        f.setVisible(true);        // TODO add your handling code here:
+        f.setVisible(true);        
     }//GEN-LAST:event_btnSair3ActionPerformed
 
     private void btnAtualizar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizar3ActionPerformed

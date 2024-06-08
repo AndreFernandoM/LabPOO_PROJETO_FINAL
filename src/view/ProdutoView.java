@@ -104,6 +104,9 @@ public class ProdutoView extends javax.swing.JFrame {
         setAutoRequestFocus(false);
         setUndecorated(true);
 
+        btnVoltar.setBackground(new java.awt.Color(255, 255, 255));
+        btnVoltar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnVoltar.setForeground(new java.awt.Color(255, 0, 0));
         btnVoltar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow-left.png"))); // NOI18N
         btnVoltar.setText("Voltar");
         btnVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -129,8 +132,10 @@ public class ProdutoView extends javax.swing.JFrame {
         txtDescricao.setForeground(new java.awt.Color(0, 0, 0));
         txtDescricao.setLineWrap(true);
         txtDescricao.setRows(5);
+        txtDescricao.setWrapStyleWord(true);
         txtDescricao.setAutoscrolls(false);
         txtDescricao.setCaretColor(new java.awt.Color(0, 0, 0));
+        txtDescricao.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtDescricao.setEnabled(false);
         txtDescricao.setFocusable(false);
         txtDescricao.setOpaque(false);
@@ -151,6 +156,9 @@ public class ProdutoView extends javax.swing.JFrame {
         txtParcela.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         txtParcela.setForeground(new java.awt.Color(255, 0, 51));
 
+        btnCarrinho.setBackground(new java.awt.Color(255, 255, 255));
+        btnCarrinho.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCarrinho.setForeground(new java.awt.Color(0, 0, 0));
         btnCarrinho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/shopping-cart-empty-side-view.png"))); // NOI18N
         btnCarrinho.setText("Adicionar Ao Carrinho");
         btnCarrinho.addActionListener(new java.awt.event.ActionListener() {
@@ -172,6 +180,9 @@ public class ProdutoView extends javax.swing.JFrame {
 
         jLabel5.setText("Calcular com FRETE:");
 
+        btnFrete.setBackground(new java.awt.Color(255, 255, 255));
+        btnFrete.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnFrete.setForeground(new java.awt.Color(0, 0, 0));
         btnFrete.setText("Calcular");
         btnFrete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -191,6 +202,7 @@ public class ProdutoView extends javax.swing.JFrame {
         txtCepValido.setOpaque(true);
         txtCepValido.setRequestFocusEnabled(false);
 
+        spnQuantidade.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         spnQuantidade.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
         spnQuantidade.setEditor(new javax.swing.JSpinner.NumberEditor(spnQuantidade, ""));
         spnQuantidade.setName("1"); // NOI18N
@@ -254,7 +266,7 @@ public class ProdutoView extends javax.swing.JFrame {
                                         .addComponent(txtQuantidade)))))
                         .addGap(44, 44, 44))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 518, Short.MAX_VALUE)
+                        .addGap(0, 515, Short.MAX_VALUE)
                         .addComponent(btnVoltar)))
                 .addContainerGap())
         );

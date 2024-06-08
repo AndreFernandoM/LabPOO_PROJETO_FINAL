@@ -4,24 +4,9 @@
  */
 package view;
 
-import java.awt.event.ActionEvent;
-import java.sql.Timestamp;
-import java.util.List;
-import javax.swing.JOptionPane;
-
 import controller.VendasDAO;
-import controller.CarrinhoDAO;
-import controller.ProdutoDAO;
-import java.util.ArrayList;
 
-import model.Carrinho;
-
-import model.Produto;
-import model.Vendas;
-
-import java.util.List;
 import javax.swing.JOptionPane;
-import model.SessaoUsuario;
 
 /**
  *
@@ -68,6 +53,9 @@ public class PagamentoView extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
+        setUndecorated(true);
+        setResizable(false);
 
         jLabel1.setText("N° do Cartão");
 
@@ -97,6 +85,9 @@ public class PagamentoView extends javax.swing.JFrame {
 
         jLabel8.setText("Telefone Titular");
 
+        btnFinalizar.setBackground(new java.awt.Color(255, 255, 255));
+        btnFinalizar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnFinalizar.setForeground(new java.awt.Color(255, 0, 0));
         btnFinalizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/shopping-cart-empty-side-view.png"))); // NOI18N
         btnFinalizar.setText("Finalizar");
         btnFinalizar.addActionListener(new java.awt.event.ActionListener() {
@@ -129,6 +120,9 @@ public class PagamentoView extends javax.swing.JFrame {
             ex.printStackTrace();
         }
 
+        jButton1.setBackground(new java.awt.Color(255, 255, 255));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 0, 0));
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/arrow-left.png"))); // NOI18N
         jButton1.setText("Voltar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
