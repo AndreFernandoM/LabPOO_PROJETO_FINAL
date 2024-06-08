@@ -4,6 +4,7 @@
  */
 package view;
 
+import com.sun.source.tree.IfTree;
 import controller.ProdutoDAO;
 import controller.CarrinhoDAO;
 import model.Produto;
@@ -261,12 +262,12 @@ public class CarrinhoView extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_SairActionPerformed
 
     private void btnFinalizarCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarCompraActionPerformed
-        if(txtCarrinhoTotal.getText().equals("0,00")){
+        if (txtCarrinhoTotal.getText().equals("0,00")) {
             JOptionPane.showMessageDialog(null, "Carrinho Vazio");
-        }else{
+        } else {
             PagamentoView p = new PagamentoView();
             p.setVisible(true);
-        
+
         }
     }//GEN-LAST:event_btnFinalizarCompraActionPerformed
 
@@ -274,10 +275,8 @@ public class CarrinhoView extends javax.swing.JFrame {
         int index = tabCarrinho.getSelectedRow();
         TableModel p = tabCarrinho.getModel();
 
-        
-        
         int id = new ProdutoDAO().getProdutoIdByNome(p.getValueAt(index, 0).toString());
-        
+
         int qnt = Integer.parseInt(p.getValueAt(index, 2).toString());
 
         if (qnt < 2) {
@@ -293,8 +292,9 @@ public class CarrinhoView extends javax.swing.JFrame {
                     configColumn();
                     return;
                 };
+            } else if(String.valueOf(op).equals("2")) {
+                new CarrinhoDAO().deletarProdutoCarrinho(id);
             }
-            new CarrinhoDAO().deletarProdutoCarrinho(id);
         }
         configColumn();
 
