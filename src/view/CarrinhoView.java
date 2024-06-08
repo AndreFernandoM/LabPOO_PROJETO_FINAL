@@ -4,17 +4,17 @@
  */
 package view;
 
+import controller.ProdutoDAO;
 import controller.CarrinhoDAO;
+import model.Produto;
+
 import java.awt.Component;
 import java.awt.Image;
-import model.Produto;
-import model.SessaoUsuario;
+import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -252,7 +252,10 @@ public class CarrinhoView extends javax.swing.JFrame {
         int index = tabCarrinho.getSelectedRow();
         TableModel p = tabCarrinho.getModel();
 
-        int id = Integer.parseInt(p.getValueAt(index, 0).toString());
+        
+        
+        int id = new ProdutoDAO().getProdutoIdByNome(p.getValueAt(index, 0).toString());
+        
         int qnt = Integer.parseInt(p.getValueAt(index, 2).toString());
 
         if (qnt < 2) {
